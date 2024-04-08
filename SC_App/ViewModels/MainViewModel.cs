@@ -1,6 +1,20 @@
-﻿namespace SC_App.ViewModels;
+﻿using MvvmHelpers;
+using SC_App.Services.Navigation;
 
-public partial class MainViewModel : ViewModelBase
+namespace SC_App.ViewModels;
+
+public class MainViewModel : BaseViewModel
 {
-    public string Greeting => "Welcome to Avalonia!";
+    private INavigationService _navigation;
+    public INavigationService Navigation
+    { 
+        get =>  _navigation; 
+        set => SetProperty(ref _navigation, value);
+    }
+
+    public MainViewModel(INavigationService navigation)
+    {
+        _navigation = navigation;
+        Navigation.NavigateTo<HomeViewModel>();
+    }
 }

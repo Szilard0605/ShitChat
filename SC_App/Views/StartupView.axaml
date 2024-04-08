@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SC_App.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SC_App.Views.MainView"
-             x:DataType="vm:MainViewModel">
+             x:Class="SC_App.Views.StartupView"
+             x:DataType="vm:StartupViewModel">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
+    <vm:StartupViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <TextBlock Text="Wait" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+
 </UserControl>
