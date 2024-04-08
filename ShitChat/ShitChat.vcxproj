@@ -41,7 +41,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -73,6 +73,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>SC_Core</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,12 +109,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\Networking\ThirdParty\RakNet\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <NoEntryPoint>false</NoEntryPoint>
+      <AdditionalDependencies>ws2_32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,18 +126,291 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\Networking\ThirdParty\RakNet\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <NoEntryPoint>false</NoEntryPoint>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Networking\Server\Server.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Base64Encoder.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\BitStream.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CCRakNetSlidingWindow.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CCRakNetUDT.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CheckSum.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CloudClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CloudCommon.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CloudServer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\CommandParserInterface.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ConnectionGraph2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ConsoleServer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DataCompressor.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DirectoryDeltaTransfer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DR_SHA1.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DS_BytePool.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DS_ByteQueue.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DS_HuffmanEncodingTree.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DS_Table.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\DynDNS.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\EmailSender.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\EpochTimeToString.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\FileList.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\FileListTransfer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\FileOperations.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\FormatString.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\FullyConnectedMesh2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Getche.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Gets.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\GetTime.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\gettimeofday.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\GridSectorizer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\HTTPConnection.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\HTTPConnection2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\IncrementalReadInterface.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Itoa.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\LinuxStrings.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\LocklessTypes.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\LogCommandParser.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\MessageFilter.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NatPunchthroughClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NatPunchthroughServer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionCommon.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionServer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NetworkIDManager.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\NetworkIDObject.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PacketConsoleLogger.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PacketFileLogger.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PacketizedTCP.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PacketLogger.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PacketOutputWindowLogger.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PluginInterface2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\PS4Includes.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Rackspace.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakMemoryOverride.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetCommandParser.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_360_720.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_Berkley.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_Berkley_NativeClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_NativeClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_PS3_PS4.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_PS4.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_Vita.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_WindowsStore8.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_Windows_Linux.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetSocket2_Windows_Linux_360.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetStatistics.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetTransport2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakNetTypes.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakPeer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakSleep.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakString.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakThread.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RakWString.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Rand.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RandSync.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ReadyEvent.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RelayPlugin.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ReliabilityLayer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ReplicaManager3.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\Router2.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\RPC4Plugin.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SecureHandshake.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SendToThread.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SignaledEvent.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SimpleMutex.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SocketLayer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\StatisticsHistory.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\StringCompressor.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\StringTable.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\SuperFastHash.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TableSerializer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TCPInterface.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TeamBalancer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TeamManager.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TelnetTransport.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\ThreadsafePacketLogger.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\TwoWayAuthentication.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\UDPForwarder.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\UDPProxyClient.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\UDPProxyCoordinator.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\UDPProxyServer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\VariableDeltaSerializer.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\VariableListDeltaTracker.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\VariadicSQLParser.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\VitaIncludes.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\WSAStartupSingleton.cpp" />
+    <ClCompile Include="src\Networking\ThirdParty\RakNet\_FindFirst.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Base.h" />
+    <ClInclude Include="src\Networking\Server\Server.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherPatchContext.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherRepositoryInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Base64Encoder.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\BitStream.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CCRakNetSlidingWindow.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CCRakNetUDT.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CheckSum.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CloudClient.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CloudCommon.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CloudServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\CommandParserInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ConnectionGraph2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ConsoleServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DataCompressor.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DirectoryDeltaTransfer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DR_SHA1.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_BinarySearchTree.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_BPlusTree.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_BytePool.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_ByteQueue.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Hash.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Heap.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_HuffmanEncodingTree.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_HuffmanEncodingTreeFactory.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_HuffmanEncodingTreeNode.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_LinkedList.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_List.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Map.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_MemoryPool.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Multilist.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_OrderedChannelHeap.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_OrderedList.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Queue.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_QueueLinkedList.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_RangeList.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Table.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_ThreadsafeAllocatingQueue.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_Tree.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DS_WeightedGraph.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\DynDNS.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\EmailSender.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\EmptyHeader.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\EpochTimeToString.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Export.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FileList.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FileListNodeContext.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FileListTransfer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FileListTransferCBInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FileOperations.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FormatString.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\FullyConnectedMesh2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Getche.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Gets.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\GetTime.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\gettimeofday.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\GridSectorizer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\HTTPConnection.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\HTTPConnection2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\IncrementalReadInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\InternalPacket.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Itoa.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Kbhit.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\LinuxStrings.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\LocklessTypes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\LogCommandParser.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\MessageFilter.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\MessageIdentifiers.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\MTUSize.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NativeFeatureIncludes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NativeFeatureIncludesOverrides.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NativeTypes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NatPunchthroughClient.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NatPunchthroughServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionClient.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionCommon.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NatTypeDetectionServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NetworkIDManager.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\NetworkIDObject.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketConsoleLogger.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketFileLogger.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketizedTCP.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketLogger.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketOutputWindowLogger.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketPool.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PacketPriority.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PluginInterface2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PS3Includes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\PS4Includes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Rackspace.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakAlloca.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakAssert.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakMemoryOverride.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetCommandParser.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetDefines.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetDefinesOverrides.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetSmartPtr.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetSocket.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetSocket2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetStatistics.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetTime.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetTransport2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetTypes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakNetVersion.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakPeer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakPeerInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakSleep.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakString.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakThread.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RakWString.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Rand.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RandSync.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ReadyEvent.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RefCountedObj.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RelayPlugin.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ReliabilityLayer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ReplicaEnums.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ReplicaManager3.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\Router2.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\RPC4Plugin.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SecureHandshake.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SendToThread.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SignaledEvent.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SimpleMutex.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SimpleTCPServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SingleProducerConsumer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SocketDefines.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SocketIncludes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SocketLayer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\StatisticsHistory.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\StringCompressor.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\StringTable.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\SuperFastHash.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TableSerializer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TCPInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TeamBalancer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TeamManager.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TelnetTransport.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ThreadPool.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\ThreadsafePacketLogger.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TransportInterface.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\TwoWayAuthentication.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\UDPForwarder.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\UDPProxyClient.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\UDPProxyCommon.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\UDPProxyCoordinator.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\UDPProxyServer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\VariableDeltaSerializer.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\VariableListDeltaTracker.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\VariadicSQLParser.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\VitaIncludes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\WindowsIncludes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\WSAStartupSingleton.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\XBox360Includes.h" />
+    <ClInclude Include="src\Networking\ThirdParty\RakNet\_FindFirst.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
