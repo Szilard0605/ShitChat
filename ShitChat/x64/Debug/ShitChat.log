@@ -1,2 +1,150 @@
 ﻿  main.cpp
-  ShitChat.vcxproj -> E:\Projects\ShitChat\x64\Debug\SC_Core.exe
+  Server.cpp
+  Base64Encoder.cpp
+  BitStream.cpp
+  CCRakNetSlidingWindow.cpp
+  CCRakNetUDT.cpp
+  CheckSum.cpp
+  CloudClient.cpp
+  CloudCommon.cpp
+  CloudServer.cpp
+  CommandParserInterface.cpp
+  ConnectionGraph2.cpp
+  ConsoleServer.cpp
+  DataCompressor.cpp
+  DirectoryDeltaTransfer.cpp
+  DR_SHA1.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\DR_SHA1.cpp(11,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\DR_SHA1.cpp(11,1):
+  '_CRT_SECURE_NO_WARNINGS' previously declared on the command line
+  
+  DS_BytePool.cpp
+  DS_ByteQueue.cpp
+  DS_HuffmanEncodingTree.cpp
+  DS_Table.cpp
+  Generating Code...
+  Compiling...
+  DynDNS.cpp
+  EmailSender.cpp
+  EpochTimeToString.cpp
+  FileList.cpp
+  FileListTransfer.cpp
+  FileOperations.cpp
+  FormatString.cpp
+  FullyConnectedMesh2.cpp
+  Getche.cpp
+  Gets.cpp
+  GetTime.cpp
+  gettimeofday.cpp
+  GridSectorizer.cpp
+  HTTPConnection.cpp
+  HTTPConnection2.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\HTTPConnection2.cpp(159,29): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\HTTPConnection2.cpp(338,50): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\HTTPConnection2.cpp(377,18): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\HTTPConnection2.cpp(572,48): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  IncrementalReadInterface.cpp
+  Itoa.cpp
+  LinuxStrings.cpp
+  LocklessTypes.cpp
+  LogCommandParser.cpp
+  Generating Code...
+  Compiling...
+  MessageFilter.cpp
+  NatPunchthroughClient.cpp
+  NatPunchthroughServer.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\NatPunchthroughServer.cpp(246,21): warning C4018: '<': signed/unsigned mismatch
+  NatTypeDetectionClient.cpp
+  NatTypeDetectionCommon.cpp
+  NatTypeDetectionServer.cpp
+  NetworkIDManager.cpp
+  NetworkIDObject.cpp
+  PacketConsoleLogger.cpp
+  PacketFileLogger.cpp
+  PacketizedTCP.cpp
+  PacketLogger.cpp
+  PacketOutputWindowLogger.cpp
+  PluginInterface2.cpp
+  PS4Includes.cpp
+  Rackspace.cpp
+  RakMemoryOverride.cpp
+  RakNetCommandParser.cpp
+  RakNetSocket.cpp
+  RakNetSocket2.cpp
+  Generating Code...
+  Compiling...
+  RakNetSocket2_360_720.cpp
+  RakNetSocket2_Berkley.cpp
+  RakNetSocket2_Berkley_NativeClient.cpp
+  RakNetSocket2_NativeClient.cpp
+  RakNetSocket2_PS3_PS4.cpp
+  RakNetSocket2_PS4.cpp
+  RakNetSocket2_Vita.cpp
+  RakNetSocket2_WindowsStore8.cpp
+  RakNetSocket2_Windows_Linux.cpp
+  RakNetSocket2_Windows_Linux_360.cpp
+  RakNetStatistics.cpp
+  RakNetTransport2.cpp
+  RakNetTypes.cpp
+  RakPeer.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakPeer.cpp(373,13): warning C4018: '<': signed/unsigned mismatch
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakPeer.cpp(521,13): warning C4018: '<': signed/unsigned mismatch
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakPeer.cpp(566,18): warning C4018: '<': signed/unsigned mismatch
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakPeer.cpp(672,14): warning C4018: '<': signed/unsigned mismatch
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakPeer.cpp(677,14): warning C4018: '<': signed/unsigned mismatch
+  RakSleep.cpp
+  RakString.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakString.cpp(471,14): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakString.cpp(495,14): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakString.cpp(516,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakString.cpp(665,33): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\RakString.cpp(696,33): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  RakThread.cpp
+  RakWString.cpp
+  Rand.cpp
+  RandSync.cpp
+  Generating Code...
+  Compiling...
+  ReadyEvent.cpp
+  RelayPlugin.cpp
+  ReliabilityLayer.cpp
+  ReplicaManager3.cpp
+  Router2.cpp
+  RPC4Plugin.cpp
+  SecureHandshake.cpp
+  SendToThread.cpp
+  SignaledEvent.cpp
+  SimpleMutex.cpp
+  SocketLayer.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\SocketLayer.cpp(170,25): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\SocketLayer.cpp(371,24): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\SocketLayer.cpp(413,24): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\SocketLayer.cpp(490,24): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+  StatisticsHistory.cpp
+  StringCompressor.cpp
+  StringTable.cpp
+  SuperFastHash.cpp
+  TableSerializer.cpp
+  TCPInterface.cpp
+  TeamBalancer.cpp
+  TeamManager.cpp
+  TelnetTransport.cpp
+  Generating Code...
+  Compiling...
+  ThreadsafePacketLogger.cpp
+  TwoWayAuthentication.cpp
+  UDPForwarder.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\UDPForwarder.cpp(235,25): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+  UDPProxyClient.cpp
+  UDPProxyCoordinator.cpp
+  UDPProxyServer.cpp
+  VariableDeltaSerializer.cpp
+  VariableListDeltaTracker.cpp
+  VariadicSQLParser.cpp
+  VitaIncludes.cpp
+  WSAStartupSingleton.cpp
+E:\Projects\ShitChat\ShitChat\src\Networking\ThirdParty\RakNet\WSAStartupSingleton.cpp(56,24): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'LPVOID'
+  _FindFirst.cpp
+  Generating Code...
+     Creating library E:\Projects\ShitChat\x64\Debug\SC_Core.lib and object E:\Projects\ShitChat\x64\Debug\SC_Core.exp
+  ShitChat.vcxproj -> E:\Projects\ShitChat\x64\Debug\SC_Core.dll

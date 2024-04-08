@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Views\HomeView.axaml.cs">
       <DependentUpon>HomeView.axaml</DependentUpon>
     </Compile>

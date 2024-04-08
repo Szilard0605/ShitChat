@@ -7,11 +7,63 @@
              x:Class="SC_App.Views.StartupView"
              x:DataType="vm:StartupViewModel">
   <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:StartupViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="Wait" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+      <Grid>
+        
+        <StackPanel 
+          Orientation="Horizontal">
+          <TextBlock
+            Text="Ip Address"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="5"/>
+          <TextBox
+            Width="160" Height="30"
+            Margin="5"
+            Text="{Binding IpAddress, Mode=TwoWay}"/>
+
+          <TextBlock
+            Text="Port"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="5"/>
+          <TextBox
+            Width="80" Height="30"
+            Margin="5"
+            Text="{Binding Port, Mode=TwoWay}"/>
+        </StackPanel>
+        
+        <StackPanel 
+          Margin="60,160,0,0"
+          Orientation="Horizontal">
+          <Button
+            Content="Start Server"
+            Margin="5"
+            Command="{Binding StartServerCommand}"/>
+          <Button
+           Content="Shutdown Server"
+           Margin="5"
+           Command="{Binding ShutdownServerCommand}"/>
+          <Button 
+            Content="Join"
+            Margin="5"
+            Command="{Binding JoinHostCommand}"/>
+        </StackPanel>
+
+        <TextBlock
+          HorizontalAlignment="Center" VerticalAlignment="Center"
+          Margin="0,80,400,0"
+          Text="{Binding StatusText}"
+          Foreground="Red"
+          IsVisible="{Binding IsStatusTextVisible}"/>
+        
+      </Grid>
+  </Grid>
 
 </UserControl>

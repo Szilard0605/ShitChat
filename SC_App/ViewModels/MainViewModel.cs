@@ -15,6 +15,6 @@ public class MainViewModel : BaseViewModel
     public MainViewModel(INavigationService navigation)
     {
         _navigation = navigation;
-        Navigation.NavigateTo<HomeViewModel>();
+        Navigation.NavigateTo<StartupViewModel>();
     }
 }
