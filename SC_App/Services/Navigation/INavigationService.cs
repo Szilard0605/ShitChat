@@ -1,10 +1,11 @@
 ﻿using MvvmHelpers;
+using SC_App.ViewModels;
 
 namespace SC_App.Services.Navigation
 {
     public interface INavigationService
     {
-        BaseViewModel CurrentView { get; }
-        void NavigateTo<T>() where T : BaseViewModel;
+        ViewModelBase CurrentView { get; }
+        void NavigateTo<T>() where T : ViewModelBase;
     }
 }

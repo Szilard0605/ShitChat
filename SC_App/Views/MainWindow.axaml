@@ -10,9 +10,6 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="SC_App">
 
-  <Window.Resources>
-    <helpers:ViewLocator x:Key="ViewLocator"/>
-  </Window.Resources>
+  <views:MainView />
   
-  <UserControl Content="{Binding Navigation.CurrentView}" ContentTemplate="{Binding Source={StaticResource ViewLocator}}"/>
 </Window>

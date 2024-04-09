@@ -1,52 +1,32 @@
-﻿using MvvmHelpers;
-using MvvmHelpers.Commands;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SC_App.Services;
-using System.Windows.Input;
 
 namespace SC_App.ViewModels
 {
-    public class StartupViewModel : BaseViewModel
+    public partial class ConnectViewModel : ViewModelBase
     {
+        [ObservableProperty]
         private string _ipAddress;
+
+        [ObservableProperty]
         private string _port;
+
+        [ObservableProperty]
         private string _statusText;
+
+        [ObservableProperty]
         private bool _isStatusTextVisible;
+
         private int _maxClients;
 
-        public string IpAddress
-        {
-            get => _ipAddress;
-            set => SetProperty(ref _ipAddress, value);
-        }
-        public string Port
-        {
-            get => _port;
-            set => SetProperty(ref _port, value);
-        }
-        public string StatusText
-        {
-            get => _statusText;
-            set => SetProperty(ref _statusText, value);
-        }
-        public bool IsStatusTextVisible
-        {
-            get => _isStatusTextVisible;
-            set => SetProperty(ref _isStatusTextVisible, value);
-        }
-        public StartupViewModel()
+        public ConnectViewModel()
         {
             StatusText = "random";
             _maxClients = 2;
-
-            StartServerCommand = new Command(StartServer);
-            ShutdownServerCommand = new Command(ShutdownServer);
-            JoinHostCommand = new Command(JoinHost);
         }
 
-        public ICommand StartServerCommand { get; private set; }
-        public ICommand ShutdownServerCommand { get; private set; }
-        public ICommand JoinHostCommand { get; private set; }
-
+        [RelayCommand]
         private void StartServer()
         {
             if (AreFieldsValid())
@@ -55,10 +35,13 @@ namespace SC_App.ViewModels
             } 
         }
 
+        [RelayCommand]
         private void ShutdownServer()
         {
             NetworkingService.ShutdownServer();
         }
+
+        [RelayCommand]
         private void JoinHost()
         {
             if (AreFieldsValid())        

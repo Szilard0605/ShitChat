@@ -18,13 +18,14 @@
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.234" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\HomeView.axaml.cs">
-      <DependentUpon>HomeView.axaml</DependentUpon>
+    <Compile Update="Views\ConnectView.axaml.cs">
+      <DependentUpon>ConnectView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ic="using:FluentIcons.Avalonia"
+             xmlns:helpers="clr-namespace:SC_App.Helpers"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SC_App.Views.MainView">
+
+  <UserControl.Resources>
+    <helpers:ViewLocator x:Key="ViewLocator"/>
+  </UserControl.Resources>
+
+  <SplitView IsPaneOpen="{Binding IsPaneOpen}"
+             DisplayMode="CompactInline"
+             OpenPaneLength="250"
+             CompactPaneLength="60">
+    <SplitView.Pane>
+      <StackPanel Orientation="Vertical"
+                  Spacing="5"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Top">
+        
+        <Button HorizontalAlignment="Left"
+                Width="45"
+                Height="32"
+                Margin="7 10"
+                Command="{Binding TriggerPaneCommand}">
+          
+          <ic:SymbolIcon Symbol="{Binding PaneSymbol}" IsFilled="True"/>         
+        </Button>
+        <StackPanel>
+
+          <Button Width="250" Command="{Binding NavigateToHomeCommand}">
+            <Button.Content>
+              <StackPanel Orientation="Horizontal">
+                <ic:SymbolIcon Symbol="Home" IsFilled="True" FontSize="26" Margin="10,0,0,0"/>
+                <Separator Width="10" Background="Transparent"/>
+                <TextBlock Text="Home" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button.Content>
+          </Button>
+
+          <Button Width="250" Command="{Binding NavigateToConnectCommand}">
+            <Button.Content>
+              <StackPanel Orientation="Horizontal">
+                <ic:SymbolIcon Symbol="Globe" IsFilled="True" FontSize="26" Margin="10,0,0,0"/>
+                <Separator Width="10" Background="Transparent"/>
+                <TextBlock Text="Connect" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button.Content>
+          </Button>
+
+          <Button Width="250" Command="{Binding NavigateToSettingsCommand}">
+            <Button.Content>
+              <StackPanel Orientation="Horizontal">
+                <ic:SymbolIcon Symbol="Settings" IsFilled="True" FontSize="26" Margin="10,0,0,0"/>
+                <Separator Width="10" Background="Transparent"/>
+                <TextBlock Text="Settings" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button.Content>
+          </Button>
+          
+        </StackPanel>
+      </StackPanel>
+    </SplitView.Pane>
+    <Grid>
+      <TransitioningContentControl Content="{Binding Navigation.CurrentView}" ContentTemplate="{Binding Source={StaticResource ViewLocator}}"/>
+    </Grid>
+  </SplitView>
+    
+
+</UserControl>

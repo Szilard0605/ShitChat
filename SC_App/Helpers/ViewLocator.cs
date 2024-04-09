@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using MvvmHelpers;
+using SC_App.ViewModels;
 using System;
 
 namespace SC_App.Helpers
@@ -26,7 +27,7 @@ namespace SC_App.Helpers
 
         public bool Match(object data)
         {
-            return data is BaseViewModel;
+            return data is ViewModelBase;
         }
     }
 }

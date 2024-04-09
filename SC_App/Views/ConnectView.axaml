@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SC_App.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SC_App.Views.StartupView"
-             x:DataType="vm:StartupViewModel">
+             x:Class="SC_App.Views.ConnectView"
+             x:DataType="vm:ConnectViewModel">
   <Design.DataContext>
-    <vm:StartupViewModel />
+    <vm:ConnectViewModel />
   </Design.DataContext>
 
   <Grid>

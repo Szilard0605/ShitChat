@@ -2,7 +2,7 @@
 
 namespace SC_App.ViewModels
 {
-    public class HomeViewModel : BaseViewModel
+    public partial class HomeViewModel : ViewModelBase
     {
     }
 }

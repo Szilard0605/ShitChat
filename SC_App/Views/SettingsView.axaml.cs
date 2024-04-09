@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SC_App.Views
 {
-    public partial class StartupView : UserControl
+    public partial class SettingsView : UserControl
     {
-        public StartupView()
+        public SettingsView()
         {
             InitializeComponent();
         }
