@@ -31,6 +31,7 @@ namespace SC_App.ViewModels
         {
             if (AreFieldsValid())
             {
+                NetworkingService.IsServerStarted = true;
                 NetworkingService.StartServer(IpAddress, int.Parse(Port), _maxClients);
             } 
         }
@@ -38,6 +39,7 @@ namespace SC_App.ViewModels
         [RelayCommand]
         private void ShutdownServer()
         {
+            NetworkingService.IsServerStarted = false;
             NetworkingService.ShutdownServer();
         }
 

@@ -6,6 +6,7 @@ namespace SC_App.Services
 {
     public class NetworkingService
     {
+        public static bool IsServerStarted;
         //hardcoded dll path //a budos kurva anyjat neki amugy
         private const string SC_CoreDLL = @"E:\Projects\ShitChat\x64\Debug\SC_Core.dll";
 
