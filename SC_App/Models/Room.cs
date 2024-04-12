@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using System.Collections.ObjectModel;
 
 namespace SC_App.Models
 {
@@ -6,6 +7,11 @@ namespace SC_App.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ImageBrush Image { get; set; }
+        public ObservableCollection<User> Users { get; set; }
+
+        public Room()
+        {
+            Users = new();
+        }
     }
 }

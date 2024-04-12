@@ -7,16 +7,10 @@ namespace SC_App.ViewModels
     public partial class NotConnectedServerViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private INavigationService _navigation;
-        public NotConnectedServerViewModel(INavigationService navigation)
+        private ConnectViewModel _connectViewModel;
+        public NotConnectedServerViewModel(ConnectViewModel connectViewModel)
         {
-            _navigation = navigation;
-        }
-
-        [RelayCommand]
-        private void ConnectToServer()
-        {
-            Navigation.NavigateTo<ConnectedServerViewModel>(INavigationService.NavDirection.Server);
+            ConnectViewModel = connectViewModel;
         }
 
     }

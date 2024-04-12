@@ -9,7 +9,6 @@ using SC_App.ViewModels;
 using SC_App.Views;
 using System;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SC_App;
@@ -17,7 +16,6 @@ namespace SC_App;
 public partial class App : Application
 {
     private DispatcherTimer _timer = new();
-    private HttpClient _httpClient;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -33,6 +31,7 @@ public partial class App : Application
 
     private async Task CheckForUpdates()
     {
+        // Host section
         if (NetworkingService.IsServerStarted)
         {
             NetworkingService.UpdateServer();
@@ -41,6 +40,17 @@ public partial class App : Application
         else
         {
             Debug.WriteLine("Server not running");
+        }
+
+        //Connect section
+        if (NetworkingService.IsClientConnected)
+        {
+            NetworkingService.ClientUpdate();
+            Debug.WriteLine("Connected");
+        }
+        else
+        {
+            Debug.WriteLine("Not Connected");
         }
 
     }

@@ -3,30 +3,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SC_App.ViewModels;assembly=SC_App"
+             xmlns:views="clr-namespace:SC_App.Views;assembly=SC_App"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SC_App.Views.NotConnectedServerView"
              x:DataType="vm:NotConnectedServerViewModel">
 
-  <Grid ShowGridLines="True" ColumnDefinitions="4*,*">
+  <Grid ShowGridLines="False" ColumnDefinitions="4*,*">
 
     <!--ServerContent-->
-    <Grid Grid.Column="0">
-      <StackPanel Grid.Row="1">
-        <TextBlock Text="Click below to connect to a server or make one yourself"
-                   TextWrapping="Wrap"/>
-        <Button Content="Connect"
-                Command="{Binding ConnectToServerCommand}"/>
-      </StackPanel>
+    <Grid Grid.Column="0"
+          ShowGridLines="True">
+
+      <TextBlock Text="You are not connected to a server..."
+                 TextWrapping="Wrap"
+                 FontSize="26"
+                 Margin="30"/>
+
+      <ContentControl Content="{Binding ConnectViewModel}"/>
+
     </Grid>
-    
-    <!--SideBar-->
+
     <Grid Grid.Column="1"
           RowDefinitions="*,4*"
           ShowGridLines="False"
           Background="#171717">
       <StackPanel>
         <TextBlock Text="Not Connected"/>
-      </StackPanel>  
+      </StackPanel>
     </Grid>
    
   </Grid>

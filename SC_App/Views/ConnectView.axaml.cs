@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System.Text.RegularExpressions;
 
 namespace SC_App.Views
 {

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SC_App.Helpers;
 using SC_App.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SC_App.ViewModels
 {
@@ -13,6 +15,9 @@ namespace SC_App.ViewModels
         private string _serverIp;
 
         [ObservableProperty]
+        private ObservableCollection<Server> _servers;
+
+        [ObservableProperty]
         private ObservableCollection<User> _users;
 
         [ObservableProperty]
@@ -21,29 +26,13 @@ namespace SC_App.ViewModels
         public ConnectedServerViewModel()
         {
             ServerName = "test";
-            ServerIp = "127.0.0.1";
+            Servers = ServerDto.Servers;
 
-            Users = new ObservableCollection<User>
-            {
-                new User{ Name = "Asd"},
-                new User{ Name = "Asd1"},
-                new User{ Name = "Asd2"},
-                new User{ Name = "Asd3"},
-            };
+            ServerIp = Servers[0].IpAddress;
 
-            Rooms = new ObservableCollection<Room>
-            {
-                new Room{ Name = "1Asd"},
-                new Room{ Name = "2Asd"},
-                new Room{ Name = "3Asd"},
-                new Room{ Name = "4Asd"},
-                new Room{ Name = "5Asd"},
-            };
-        }
+            Users = Servers[0].Users;
 
-        private bool IsConnected()
-        {
-            return false;
+            Rooms = Servers[0].Rooms;
         }
     }
 }
