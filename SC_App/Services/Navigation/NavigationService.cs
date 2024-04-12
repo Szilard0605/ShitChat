@@ -1,12 +1,18 @@
-﻿using MvvmHelpers;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SC_App.ViewModels;
 using System;
+using System.Collections;
 
 namespace SC_App.Services.Navigation
 {
-    public class NavigationService : ViewModelBase, INavigationService
+    public partial class NavigationService : ViewModelBase, INavigationService
     {
-        private ViewModelBase _currentView;
+        [ObservableProperty]
+        private ViewModelBase _currentMainView;
+
+        [ObservableProperty]
+        private ViewModelBase _currentServerView;
+
         private Func<Type, ViewModelBase> _viewModelFactory;
 
         public NavigationService(Func<Type, ViewModelBase> viewModelFactory)
@@ -14,16 +20,20 @@ namespace SC_App.Services.Navigation
             _viewModelFactory = viewModelFactory;
         }
 
-        public ViewModelBase CurrentView
-        {
-            get => _currentView;
-            set => SetProperty(ref _currentView, value);
-        }
-
-        public void NavigateTo<TViewModelBase>() where TViewModelBase : ViewModelBase
+        public void NavigateTo<TViewModelBase>(INavigationService.NavDirection navProp) where TViewModelBase : ViewModelBase
         {
             ViewModelBase viewModel = _viewModelFactory.Invoke(typeof(TViewModelBase));
-            CurrentView = viewModel;
+            switch (navProp)
+            {
+                case INavigationService.NavDirection.Main:
+                    CurrentMainView = viewModel;
+                    break;
+                case INavigationService.NavDirection.Server:
+                    CurrentServerView = viewModel;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

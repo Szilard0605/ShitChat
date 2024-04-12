@@ -20,23 +20,33 @@
                   Spacing="5"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
-        
-        <Button HorizontalAlignment="Left"
-                Width="45"
-                Height="32"
-                Margin="7 10"
-                Command="{Binding TriggerPaneCommand}">
-          
-          <ic:SymbolIcon Symbol="{Binding PaneSymbol}" IsFilled="True"/>         
-        </Button>
+        <StackPanel Orientation="Horizontal">
+          <Button HorizontalAlignment="Left"
+                  Width="45"
+                  Height="32"
+                  Margin="7 10"
+                  Command="{Binding TriggerPaneCommand}">
+
+            <ic:SymbolIcon Symbol="{Binding PaneSymbol}" IsFilled="True"/>
+          </Button>
+          <!--<TextBlock 
+            Text="Nickname"
+            FontSize="16"
+            VerticalAlignment="Center" HorizontalAlignment="Right"
+            Width="140"
+            Margin="0"/>
+          <Image Source="/Assets/avalonia-logo.ico" 
+                 Width="32" Height="32"
+                 VerticalAlignment="Center" HorizontalAlignment="Right"/>-->
+        </StackPanel>
         <StackPanel>
 
-          <Button Width="250" Command="{Binding NavigateToHomeCommand}">
+          <Button Width="250" Command="{Binding NavigateToServerCommand}">
             <Button.Content>
               <StackPanel Orientation="Horizontal">
                 <ic:SymbolIcon Symbol="Home" IsFilled="True" FontSize="26" Margin="10,0,0,0"/>
                 <Separator Width="10" Background="Transparent"/>
-                <TextBlock Text="Home" VerticalAlignment="Center"/>
+                <TextBlock Text="Server" VerticalAlignment="Center"/>
               </StackPanel>
             </Button.Content>
           </Button>
@@ -65,7 +75,7 @@
       </StackPanel>
     </SplitView.Pane>
     <Grid>
-      <TransitioningContentControl Content="{Binding Navigation.CurrentView}" ContentTemplate="{Binding Source={StaticResource ViewLocator}}"/>
+      <TransitioningContentControl Content="{Binding Navigation.CurrentMainView}" ContentTemplate="{Binding Source={StaticResource ViewLocator}}"/>
     </Grid>
   </SplitView>
     

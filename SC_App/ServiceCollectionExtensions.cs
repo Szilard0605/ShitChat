@@ -15,7 +15,10 @@ namespace SC_App
             collection.AddSingleton<MainViewModel>();
             collection.AddSingleton<ConnectViewModel>();
             collection.AddSingleton<SettingsViewModel>();
-            collection.AddSingleton<HomeViewModel>();
+
+            collection.AddSingleton<ServerViewModel>();
+            collection.AddSingleton<ConnectedServerViewModel>();
+            collection.AddSingleton<NotConnectedServerViewModel>();
 
         }
     }

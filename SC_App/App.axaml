@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:SC_App.ViewModels;assembly=SC_App"
              xmlns:helpers="clr-namespace:SC_App.Helpers"
              x:Class="SC_App.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
   <Application.DataTemplates>
@@ -12,7 +12,7 @@
   </Application.DataTemplates>
 
   <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+    <FluentTheme /> 
+   </Application.Styles>
   
 </Application>

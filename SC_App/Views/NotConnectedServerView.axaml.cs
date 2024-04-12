@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SC_App.Views
 {
-    public partial class HomeView : UserControl
+    public partial class NotConnectedServerView : UserControl
     {
-        public HomeView()
+        public NotConnectedServerView()
         {
             InitializeComponent();
         }
