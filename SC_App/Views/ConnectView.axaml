@@ -51,9 +51,9 @@
            Margin="5"
            Command="{Binding ShutdownServerCommand}"/>
           <Button 
-            Content="Join"
+            Content="Connect"
             Margin="5"
-            Command="{Binding JoinHostCommand}"/>
+            Command="{Binding ConnectServerCommand}"/>
         </StackPanel>
 
         <TextBlock

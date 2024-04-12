@@ -44,11 +44,11 @@ namespace SC_App.ViewModels
         }
 
         [RelayCommand]
-        private void JoinHost()
+        private void ConnectServer()
         {
             if (AreFieldsValid())        
             {
-                //joinhost
+                //connect
             }
         }
 
@@ -60,11 +60,9 @@ namespace SC_App.ViewModels
                 StatusText = "Fields cannot be blank";
                 return false;
             }
-            else
-            {
-                IsStatusTextVisible = false;
-                return true;
-            }
+
+            IsStatusTextVisible = false;
+            return true;
         }
 
 

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Avalonia;
 using FluentIcons.Common;
 using SC_App.Services.Navigation;
 
@@ -20,7 +19,7 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(INavigationService navigation)
     {
         _navigation = navigation;
-        Navigation.NavigateTo<HomeViewModel>();
+        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
 
         PaneSymbol = Symbol.ArrowRight;
     }
@@ -41,18 +40,18 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void NavigateToHome()
+    private void NavigateToServer()
     {
-        Navigation.NavigateTo<HomeViewModel>();
+        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
     }
     [RelayCommand]
     private void NavigateToConnect()
     {
-        Navigation.NavigateTo<ConnectViewModel>();
+        Navigation.NavigateTo<ConnectViewModel>(INavigationService.NavDirection.Main);
     }
     [RelayCommand]
     private void NavigateToSettings()
     {
-        Navigation.NavigateTo<SettingsViewModel>();
+        Navigation.NavigateTo<SettingsViewModel>(INavigationService.NavDirection.Main);
     }
 }

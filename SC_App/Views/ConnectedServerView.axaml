@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SC_App.Views.ConnectedServerView">
+
+  <Grid ShowGridLines="True" ColumnDefinitions="4*,*">
+
+    <!--SideBar-->
+    <Grid Grid.Column="1"
+          RowDefinitions="*,4*"
+          ShowGridLines="False"
+          Background="#171717">
+      <StackPanel>
+        <TextBlock Text="{Binding ServerName}"/>
+        <TextBlock Text="{Binding ServerIp}"/>
+      </StackPanel>
+
+      <StackPanel Grid.Row="1">
+        <TextBlock Text="Members"/>
+        <ScrollViewer MaxHeight="150">
+          <ListBox ItemsSource="{Binding Users}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+        <TextBlock Text="Rooms"/>
+        <ScrollViewer MaxHeight="150">
+          <ListBox ItemsSource="{Binding Rooms}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+      </StackPanel>
+    </Grid>
+
+    <!--ServerContent-->
+  </Grid>
+
+</UserControl>

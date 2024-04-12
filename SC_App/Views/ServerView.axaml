@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SC_App.ViewModels;assembly=SC_App"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SC_App.Views.HomeView">
+             x:Class="SC_App.Views.ServerView"
+             x:DataType="vm:ServerViewModel">
+
+  <TransitioningContentControl Content="{Binding Navigation.CurrentServerView}"/>
   
-  <TextBlock Text="youre ass" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 </UserControl>
