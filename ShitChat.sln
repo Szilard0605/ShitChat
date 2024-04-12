@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC_App", "SC_App\SC_App.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC_App.Desktop", "SC_App.Desktop\SC_App.Desktop.csproj", "{BD79F2F3-EAF7-44CE-B74D-1F0526C334B8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dbgapp", "dbgapp\dbgapp.csproj", "{9A114A58-9418-4578-879F-0F13ACD5D43F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{BD79F2F3-EAF7-44CE-B74D-1F0526C334B8}.Release|x64.Build.0 = Release|Any CPU
 		{BD79F2F3-EAF7-44CE-B74D-1F0526C334B8}.Release|x86.ActiveCfg = Release|Any CPU
 		{BD79F2F3-EAF7-44CE-B74D-1F0526C334B8}.Release|x86.Build.0 = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|x64.Build.0 = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Debug|x86.Build.0 = Debug|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x64.ActiveCfg = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x64.Build.0 = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
