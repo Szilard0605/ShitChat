@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Networking\Server\ClientManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Networking\Client\Client.cpp" />
     <ClCompile Include="src\Networking\Server\Server.cpp" />
@@ -257,7 +256,6 @@
     <ClCompile Include="src\Networking\ThirdParty\RakNet\_FindFirst.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Networking\Server\ClientManager.h" />
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\Networking\Client\Client.h" />
     <ClInclude Include="src\Networking\PacketIdentifiers.h" />
