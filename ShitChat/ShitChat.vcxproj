@@ -145,9 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Networking\Client\Client.cpp" />
-    <ClCompile Include="src\Networking\Server\Server.cpp" />
+    <ClCompile Include="src\Networking\Client\NetClient.cpp" />
+    <ClCompile Include="src\Networking\Server\NetServer.cpp" />
     <ClCompile Include="src\Networking\ThirdParty\RakNet\Base64Encoder.cpp" />
     <ClCompile Include="src\Networking\ThirdParty\RakNet\BitStream.cpp" />
     <ClCompile Include="src\Networking\ThirdParty\RakNet\CCRakNetSlidingWindow.cpp" />
@@ -261,9 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Base.h" />
-    <ClInclude Include="src\Networking\Client\Client.h" />
+    <ClInclude Include="src\Networking\Client\NetClient.h" />
     <ClInclude Include="src\Networking\PacketIdentifiers.h" />
-    <ClInclude Include="src\Networking\Server\Server.h" />
+    <ClInclude Include="src\Networking\Server\NetServer.h" />
     <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherPatchContext.h" />
     <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherRepositoryInterface.h" />
     <ClInclude Include="src\Networking\ThirdParty\RakNet\Base64Encoder.h" />

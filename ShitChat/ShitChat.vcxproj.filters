@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\Server\Server.cpp">
+    <ClCompile Include="src\Networking\Server\NetServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Networking\ThirdParty\RakNet\_FindFirst.cpp">
@@ -351,12 +348,12 @@
     <ClCompile Include="src\Networking\ThirdParty\RakNet\DR_SHA1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Networking\Client\Client.cpp">
+    <ClCompile Include="src\Networking\Client\NetClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Networking\Server\Server.h">
+    <ClInclude Include="src\Networking\Server\NetServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Networking\ThirdParty\RakNet\_FindFirst.h">
@@ -824,7 +821,7 @@
     <ClInclude Include="src\Networking\ThirdParty\RakNet\DR_SHA1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Networking\Client\Client.h">
+    <ClInclude Include="src\Networking\Client\NetClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Networking\PacketIdentifiers.h">

@@ -34,6 +34,22 @@ namespace SC_App.Services
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ClientUpdate();
 
+        // Client side event
+        // gets called when the server accepts the connection,
+        // and sends the client's ID
+        [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback);
+        public delegate void ConnectionAcceptedCallback(int ID);
+
+        [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetClientIDByAddress(string Address);
+
+        [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern string GetClientAddressByID(string ID);
+
+        [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern Int64 GetConnectedClientsCount();
+
         public static void OnClientConnect(string name, int id)
         {
             Console.WriteLine($"{name}[{id}] connected");

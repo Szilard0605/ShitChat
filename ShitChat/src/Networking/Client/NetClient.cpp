@@ -1,4 +1,4 @@
-#include "Client.h"
+#include "NetClient.h"
 
 
 #include "RakPeerInterface.h"
@@ -12,6 +12,8 @@
 static RakNet::RakPeerInterface* s_PeerInterface;
 
 #define MAX_NAME_LENGTH 14
+
+static ConnectionAcceptedCallback s_ConnectionAcceptedCallback;
 
 struct ClientData
 {
@@ -60,6 +62,19 @@ void ClientUpdate()
 				bsOut.Write(PacketID::CLIENT_DATA);
 				bsOut.Write(s_ClientData.Name);
 				s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+				
+				break;
+			}
+
+			case CLIENT_DATA:
+			{
+				int inID;
+				RakNet::RakString userName;
+				RakNet::BitStream bsIn;
+				bsIn.IgnoreBytes(sizeof(PacketID::CLIENT_DATA));
+				bsIn.Read(inID);
+
+				s_ConnectionAcceptedCallback(inID);
 				break;
 			}
 
@@ -70,4 +85,9 @@ void ClientUpdate()
 			}
 		}
 	}
+}
+
+SC_EXPORT void SetConnctionAcceptedHandler(ConnectionAcceptedCallback callback)
+{
+	s_ConnectionAcceptedCallback = callback;
 }
