@@ -9,14 +9,14 @@
 
 #include "Networking/PacketIdentifiers.h"
 
-#include <map>
+#include <unordered_map>
 #include <string>
 
 
 struct ServerData
 {
 	int ConnectCount = 0;
-	std::map<std::string, int> Clients;
+	std::unordered_map<std::string, int> Clients;
 
 	RakNet::RakPeerInterface* PeerInterface;
 
@@ -81,9 +81,11 @@ void UpdateServer()
 			case PacketID::CLIENT_DATA:
 			{
 				RakNet::RakString userName;
-				RakNet::BitStream bsIn;
-				bsIn.IgnoreBytes(sizeof(PacketID::CLIENT_DATA));
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(userName);
+
+				printf("[Core]: user %s connected from %s\n", userName, packet->systemAddress.ToString());
 
 				AddNewClient(packet->systemAddress.ToString(), userName);
 				break;
@@ -119,9 +121,15 @@ SC_EXPORT int GetClientIDByAddress(const char* Address)
 	return s_ServerData.Clients[Address];
 }
 
-SC_EXPORT char* GetClientAddressByID(int ID)
+SC_EXPORT const char* GetClientAddressByID(int ID)
 {
-	return nullptr;
+	auto it = std::find_if(std::begin(s_ServerData.Clients), std::end(s_ServerData.Clients),
+		[&ID](auto&& p) { return p.second == ID; });
+
+	if (it == std::end(s_ServerData.Clients))
+		return "unknown";
+
+	return it->first.c_str();
 }
 
 __int64 GetConnectedClientsCount()

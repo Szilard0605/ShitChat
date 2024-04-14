@@ -9,6 +9,8 @@
 
 #include "Networking/PacketIdentifiers.h"
 
+#include <string>
+
 static RakNet::RakPeerInterface* s_PeerInterface;
 
 #define MAX_NAME_LENGTH 14
@@ -17,18 +19,13 @@ static ConnectionAcceptedCallback s_ConnectionAcceptedCallback;
 
 struct ClientData
 {
-	char Name[MAX_NAME_LENGTH];
+	std::string Name;
 	int ID;
-};
-
-ClientData s_ClientData;
+} s_ClientData;
 
 bool ConnectToServer(const char* IP, int Port, const char* Name)
 {
-	if (strlen(Name) > MAX_NAME_LENGTH)
-		return false;
-
-	strcpy_s(s_ClientData.Name, sizeof(Name), Name);
+	s_ClientData.Name = Name;
 
 	s_PeerInterface = RakNet::RakPeerInterface::GetInstance();
 
@@ -57,12 +54,16 @@ void ClientUpdate()
 		{
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
+				printf("[Core]: sending name: %s\n", s_ClientData.Name.c_str());
+
 				// Send client data to server
 				RakNet::BitStream bsOut;
 				bsOut.Write(PacketID::CLIENT_DATA);
-				bsOut.Write(s_ClientData.Name);
+				bsOut.Write(s_ClientData.Name.c_str());
 				s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				
+				printf("[Core]: Connection request accepted\n");
+
 				break;
 			}
 
@@ -70,11 +71,12 @@ void ClientUpdate()
 			{
 				int inID;
 				RakNet::RakString userName;
-				RakNet::BitStream bsIn;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(PacketID::CLIENT_DATA));
 				bsIn.Read(inID);
-
-				s_ConnectionAcceptedCallback(inID);
+				
+				if(s_ConnectionAcceptedCallback)
+					s_ConnectionAcceptedCallback(inID);
 				break;
 			}
 
@@ -87,7 +89,7 @@ void ClientUpdate()
 	}
 }
 
-SC_EXPORT void SetConnctionAcceptedHandler(ConnectionAcceptedCallback callback)
+SC_EXPORT void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback)
 {
 	s_ConnectionAcceptedCallback = callback;
 }
