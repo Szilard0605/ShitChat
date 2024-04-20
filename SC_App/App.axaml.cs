@@ -32,15 +32,15 @@ public partial class App : Application
     private async Task CheckForUpdates()
     {
         // Host section
-        if (NetworkingService.IsServerStarted)
+        if (NetworkingService.Server.IsStarted)
         {
-            NetworkingService.UpdateServer();
+            NetworkingService.Server.UpdateServer();
         }
 
         //Connect section
-        if (NetworkingService.IsClientConnected)
+        if (NetworkingService.Client.IsConnected)
         {
-            NetworkingService.ClientUpdate();
+            NetworkingService.Client.ClientUpdate();
         }
 
     }

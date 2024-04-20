@@ -64,16 +64,26 @@ namespace SC_App.ViewModels
             return true;
         }
 
+        private static void OnClientConnect(string Name, int ID)
+        {
+            Debug.WriteLine($"{Name}[{ID}] connected");
+        }
+
+        private static void OnConnectionAccepted(int ID)
+        {
+            Debug.WriteLine($"Connection accepted, ID assigned: {ID}");
+        }
+
         [RelayCommand]
         private void StartServer()
         {
             if (AreHostFieldsValid())
             {
-                NetworkingService.IsServerStarted = NetworkingService.StartServer(HostIpAddress, HostPort, MaxClients);
-                if (NetworkingService.IsServerStarted)
+                NetworkingService.Server.IsStarted = NetworkingService.Server.StartServer(HostIpAddress, HostPort, MaxClients);
+                if (NetworkingService.Server.IsStarted)
                 {
                     Debug.WriteLine("Successfully started server");
-                    NetworkingService.SetClientConnectHandler(NetworkingService.OnClientConnect);
+                    NetworkingService.Server.SetClientConnectHandler(OnClientConnect);
                 }
                 else
                 {
@@ -82,12 +92,12 @@ namespace SC_App.ViewModels
 
                 // Instantly connect to created server as host
                 string _hostName = "host";
-                NetworkingService.IsClientConnected = NetworkingService.ConnectToServer(HostIpAddress, HostPort, _hostName);
-                if (NetworkingService.IsClientConnected)
+                NetworkingService.Client.IsConnected = NetworkingService.Client.ConnectToServer(HostIpAddress, HostPort, _hostName);
+                if (NetworkingService.Client.IsConnected)
                 {
                     Debug.WriteLine("Connected to server successfully.");
 
-                    NetworkingService.SetConnectionAcceptedHandler(NetworkingService.OnConnectionAccepted);
+                    NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
                 }
                 else
                 {
@@ -128,10 +138,10 @@ namespace SC_App.ViewModels
         [RelayCommand]
         private void ShutdownServer()
         {
-            if (NetworkingService.IsServerStarted)
+            if (NetworkingService.Server.IsStarted)
             {
-                NetworkingService.ShutdownServer();
-                NetworkingService.IsServerStarted = false;
+                NetworkingService.Server.ShutdownServer();
+                NetworkingService.Server.IsStarted = false;
             }
         }
 
@@ -180,12 +190,12 @@ namespace SC_App.ViewModels
         {
             if (AreConnectFieldsValid())        
             {
-                NetworkingService.IsClientConnected = NetworkingService.ConnectToServer(ConnectIpAddress, ConnectPort, Nickname);
-                if (NetworkingService.IsClientConnected)
+                NetworkingService.Client.IsConnected = NetworkingService.Client.ConnectToServer(ConnectIpAddress, ConnectPort, Nickname);
+                if (NetworkingService.Client.IsConnected)
                 {
                     Debug.WriteLine("Connected to server successfully.");
 
-                    NetworkingService.SetConnectionAcceptedHandler(NetworkingService.OnConnectionAccepted);
+                    NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
                 }
                 else
                 {
@@ -197,10 +207,10 @@ namespace SC_App.ViewModels
         [RelayCommand]
         private void DisconnectFromServer()
         {
-            if (NetworkingService.IsClientConnected)
+            if (NetworkingService.Client.IsConnected)
             {
-                NetworkingService.DisconnectFromServer();
-                NetworkingService.IsClientConnected = false;
+                NetworkingService.Client.DisconnectFromServer();
+                NetworkingService.Client.IsConnected = false;
             }
         }
     }
