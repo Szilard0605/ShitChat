@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SC_App.Utils
+﻿namespace SC_App.Utils
 {
     public class Constants
     {

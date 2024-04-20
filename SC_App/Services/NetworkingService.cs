@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace SC_App.Services
 {
+    public delegate void ClientConnectCallback(string Name, int ID);
+    public delegate void ConnectionAcceptedCallback(int ID);
+
     public class NetworkingService
     {
         public static bool IsServerStarted;
         public static bool IsClientConnected;
-        // hardcoded dll path
         private const string SC_CoreDLL = @"SC_Core.dll";
 
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -22,8 +25,6 @@ namespace SC_App.Services
         // Import the SetEventCallback function from the DLL
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetClientConnectHandler(ClientConnectCallback callback);
-        public delegate void ClientConnectCallback(string Name, int ID);
-
 
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern bool ConnectToServer(string ip, int port, string name);
@@ -39,7 +40,6 @@ namespace SC_App.Services
         // and sends the client's ID
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback);
-        public delegate void ConnectionAcceptedCallback(int ID);
 
         [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetClientIDByAddress(string Address);
@@ -52,7 +52,11 @@ namespace SC_App.Services
 
         public static void OnClientConnect(string name, int id)
         {
-            Console.WriteLine($"{name}[{id}] connected");
+            Debug.WriteLine($"{name}[{id}] connected");
+        }
+        public static void OnConnectionAccepted(int id)
+        {
+            Debug.WriteLine($"Connection accepted by the server. {id}");
         }
     }
 }

@@ -35,22 +35,12 @@ public partial class App : Application
         if (NetworkingService.IsServerStarted)
         {
             NetworkingService.UpdateServer();
-            Debug.WriteLine("Server running");
-        }
-        else
-        {
-            Debug.WriteLine("Server not running");
         }
 
         //Connect section
         if (NetworkingService.IsClientConnected)
         {
             NetworkingService.ClientUpdate();
-            Debug.WriteLine("Connected");
-        }
-        else
-        {
-            Debug.WriteLine("Not Connected");
         }
 
     }

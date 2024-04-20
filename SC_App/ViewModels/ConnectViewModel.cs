@@ -1,13 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SC_App.Helpers;
+using SC_App.Models;
 using SC_App.Services;
 using SC_App.Services.Navigation;
 using SC_App.Utils;
-using SC_App.Models;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
+using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SC_App.ViewModels
 {
@@ -69,8 +69,16 @@ namespace SC_App.ViewModels
         {
             if (AreHostFieldsValid())
             {
-                NetworkingService.StartServer(HostIpAddress, HostPort, MaxClients);
-                NetworkingService.IsServerStarted = true;
+                NetworkingService.IsServerStarted = NetworkingService.StartServer(HostIpAddress, HostPort, MaxClients);
+                if (NetworkingService.IsServerStarted)
+                {
+                    Debug.WriteLine("Successfully started server");
+                    NetworkingService.SetClientConnectHandler(NetworkingService.OnClientConnect);
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to start server");
+                }
 
                 // Instantly connect to created server as host
                 string _hostName = "host";
@@ -163,8 +171,17 @@ namespace SC_App.ViewModels
         {
             if (AreConnectFieldsValid())        
             {
-                NetworkingService.ConnectToServer(ConnectIpAddress, ConnectPort, Nickname);
-                NetworkingService.IsClientConnected = true;
+                NetworkingService.IsClientConnected = NetworkingService.ConnectToServer(ConnectIpAddress, ConnectPort, Nickname);
+                if (NetworkingService.IsClientConnected)
+                {
+                    Debug.WriteLine("Connected to server successfully.");
+
+                    NetworkingService.SetConnectionAcceptedHandler(NetworkingService.OnConnectionAccepted);
+                }
+                else
+                {
+                    Debug.WriteLine("Couldnt connect to server.");
+                }
             }
         }
 
