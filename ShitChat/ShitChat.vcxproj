@@ -261,7 +261,8 @@
   <ItemGroup>
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\Networking\Client\NetClient.h" />
-    <ClInclude Include="src\Networking\PacketIdentifiers.h" />
+    <ClInclude Include="src\Networking\Common\PacketIdentifiers.h" />
+    <ClInclude Include="src\Networking\Common\Utils.h" />
     <ClInclude Include="src\Networking\Server\NetServer.h" />
     <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherPatchContext.h" />
     <ClInclude Include="src\Networking\ThirdParty\RakNet\AutopatcherRepositoryInterface.h" />

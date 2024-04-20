@@ -824,7 +824,10 @@
     <ClInclude Include="src\Networking\Client\NetClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Networking\PacketIdentifiers.h">
+    <ClInclude Include="src\Networking\Common\PacketIdentifiers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\Common\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

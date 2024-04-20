@@ -7,7 +7,8 @@
 
 #include "RakSleep.h"
 
-#include "Networking/PacketIdentifiers.h"
+#include "Networking/Common/PacketIdentifiers.h"
+#include "Networking/Common/Utils.h"
 
 #include <unordered_map>
 #include <string>
@@ -17,6 +18,7 @@ struct ServerData
 {
 	int ConnectCount = 0;
 	std::unordered_map<std::string, int> Clients;
+	std::unordered_map<int, std::string> ClientNameMap;
 
 	RakNet::RakPeerInterface* PeerInterface;
 
@@ -27,8 +29,6 @@ struct ServerData
 // Returns true if successful, otherwise returns false
 bool StartServer(const char* IP, int Port, int MaxClients)
 {
-	printf("[Core] Server started at address %s:%d (%d)\n", IP, Port, MaxClients);
-
 	s_ServerData.PeerInterface = RakNet::RakPeerInterface::GetInstance();
 
 	RakNet::SocketDescriptor sd((unsigned short)Port, IP);
@@ -53,21 +53,66 @@ void AddNewClient(const char* IPAddress, const char* UserName)
 	s_ServerData.ConnectCount++;
 	int ID = s_ServerData.ConnectCount;
 	s_ServerData.Clients[IPAddress] = ID;
+	s_ServerData.ClientNameMap[ID] = UserName;
 
-	if(s_ServerData.ConnectCallback)
-		s_ServerData.ConnectCallback(UserName, ID);
+	CALL_HANDLER(s_ServerData.ConnectCallback, UserName, ID);
 
-	// Send client data to server
-	RakNet::BitStream bsOut;
-	bsOut.Write(PacketID::CLIENT_DATA);
-	bsOut.Write(ID);
-	s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(IPAddress), false);
+	// Send client data
+	{
+		RakNet::BitStream bsOut;
+		bsOut.Write(PacketID::CLIENT_DATA);
+		bsOut.Write(ID);
+		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(IPAddress), false);
+	}
 
+	// Send already connected clients
+	for (auto& Client : s_ServerData.Clients)
+	{
+		RakNet::BitStream bsOut;
+		bsOut.Write(PacketID::INTRODUCE_CLIENT);
+		bsOut.Write(Client.second);
+		bsOut.Write(s_ServerData.ClientNameMap[Client.second]);
+		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(IPAddress), false);
+	}
+
+	// Introduce connected client to already connected clients
+	for (auto& Client : s_ServerData.Clients)
+	{
+		if (ID != Client.second)
+		{
+			RakNet::BitStream bsOut;
+			bsOut.Write(PacketID::INTRODUCE_CLIENT);
+			bsOut.Write(ID);
+			bsOut.Write(UserName);
+			s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(Client.first.c_str()), false);
+		}
+	}
 }
 
 void RemoveClient(const char* IPAddress)
 {
+	s_ServerData.ClientNameMap.erase(GetClientIDByAddress(IPAddress));
 	s_ServerData.Clients.erase(IPAddress);
+}
+
+void SendChatroomMessageFromClient(int ID, const char* Message, int RoomID)
+{
+	for (auto& Client : s_ServerData.Clients)
+	{
+		std::string clientAddr = Client.first;
+		int clientID = Client.second;
+
+		if (clientID != ID)
+		{
+			// Send client data to server
+			RakNet::BitStream bsOut;
+			bsOut.Write(PacketID::CHATROOM_MESSAGE);
+			bsOut.Write(ID);
+			bsOut.Write(RoomID);
+			bsOut.Write(Message);
+			s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(clientAddr.c_str()), false);
+		}
+	}
 }
 
 void UpdateServer()
@@ -84,9 +129,6 @@ void UpdateServer()
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(userName);
-
-				printf("[Core]: user %s connected from %s\n", userName, packet->systemAddress.ToString());
-
 				AddNewClient(packet->systemAddress.ToString(), userName);
 				break;
 			}
@@ -94,6 +136,19 @@ void UpdateServer()
 			case ID_CONNECTION_LOST:
 			{
 				RemoveClient(packet->systemAddress.ToString());
+				break;
+			}
+
+			case CHATROOM_MESSAGE:
+			{
+				int RoomID;
+				RakNet::RakString Message;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(RoomID);
+				bsIn.Read(Message);
+
+				SendChatroomMessageFromClient(GetClientIDByAddress(packet->systemAddress.ToString()), Message, RoomID);
 				break;
 			}
 

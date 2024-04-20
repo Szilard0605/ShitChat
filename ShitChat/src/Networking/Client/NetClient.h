@@ -3,6 +3,8 @@
 #include "Base.h"
 
 typedef void (*ConnectionAcceptedCallback)(int ID);
+typedef void (*ChatroomMessageCallback)(int ClientID, const char* Message, int RoomID);
+typedef void (*IntroduceClientCallback)(int ClientID, const char* Name);
 
 extern "C"
 {
@@ -10,5 +12,12 @@ extern "C"
 	SC_EXPORT void DisconnectFromServer();
 	SC_EXPORT void ClientUpdate();
 
-	SC_EXPORT void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback);
+	SC_EXPORT void SetConnectionAcceptedHandler(ConnectionAcceptedCallback Callback);
+
+	SC_EXPORT void SendChatroomMessage(const char* Message, int RoomID);
+	SC_EXPORT void SetChatroomMessageHandler(ChatroomMessageCallback Callback);
+
+	SC_EXPORT void SetIntroduceClientHandler(IntroduceClientCallback Callback);
+
+
 }

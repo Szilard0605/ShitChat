@@ -7,15 +7,19 @@
 #include "RakNetTypes.h"
 #include "Gets.h"
 
-#include "Networking/PacketIdentifiers.h"
+#include "Networking/Common/PacketIdentifiers.h"
+#include "Networking/Common/Utils.h"
 
 #include <string>
 
 static RakNet::RakPeerInterface* s_PeerInterface;
+static RakNet::SystemAddress s_ServerSysAddr;
 
 #define MAX_NAME_LENGTH 14
 
 static ConnectionAcceptedCallback s_ConnectionAcceptedCallback;
+static ChatroomMessageCallback s_ChatroomMessageCallback;
+static IntroduceClientCallback s_IntroduceClientCallback;
 
 struct ClientData
 {
@@ -54,16 +58,13 @@ void ClientUpdate()
 		{
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
-				printf("[Core]: sending name: %s\n", s_ClientData.Name.c_str());
-
 				// Send client data to server
 				RakNet::BitStream bsOut;
 				bsOut.Write(PacketID::CLIENT_DATA);
 				bsOut.Write(s_ClientData.Name.c_str());
 				s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-				
-				printf("[Core]: Connection request accepted\n");
-
+			
+				s_ServerSysAddr = packet->systemAddress;
 				break;
 			}
 
@@ -72,11 +73,37 @@ void ClientUpdate()
 				int inID;
 				RakNet::RakString userName;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(PacketID::CLIENT_DATA));
+				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(inID);
-				
-				if(s_ConnectionAcceptedCallback)
-					s_ConnectionAcceptedCallback(inID);
+	
+				CALL_HANDLER(s_ConnectionAcceptedCallback, inID);
+				break;
+			}
+
+			case CHATROOM_MESSAGE:
+			{
+				int ClientID, RoomID;
+				RakNet::RakString Message;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(ClientID);
+				bsIn.Read(RoomID);
+				bsIn.Read(Message);
+
+				CALL_HANDLER(s_ChatroomMessageCallback, ClientID, Message.C_String(), RoomID);
+				break;
+			}
+
+			case INTRODUCE_CLIENT:
+			{
+				int inID;
+				RakNet::RakString userName;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(inID);
+				bsIn.Read(userName);
+
+				CALL_HANDLER(s_IntroduceClientCallback, inID, userName);
 				break;
 			}
 
@@ -89,7 +116,28 @@ void ClientUpdate()
 	}
 }
 
-SC_EXPORT void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback)
+void SetConnectionAcceptedHandler(ConnectionAcceptedCallback Callback)
 {
-	s_ConnectionAcceptedCallback = callback;
+	s_ConnectionAcceptedCallback = Callback;
+}
+
+void SendChatroomMessage(const char* Message, int RoomID)
+{
+	// Send client data to server
+	RakNet::BitStream bsOut;
+	bsOut.Write(PacketID::CHATROOM_MESSAGE);
+	bsOut.Write(RoomID);
+	bsOut.Write(Message);
+	s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, s_ServerSysAddr, false);
+
+}
+
+void SetChatroomMessageHandler(ChatroomMessageCallback Callback)
+{
+	s_ChatroomMessageCallback = Callback;
+}
+
+void SetIntroduceClientHandler(IntroduceClientCallback Callback)
+{
+	s_IntroduceClientCallback = Callback;
 }

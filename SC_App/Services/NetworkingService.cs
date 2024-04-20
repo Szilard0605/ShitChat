@@ -4,8 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace SC_App.Services
 {
-    public delegate void ClientConnectCallback(string Name, int ID);
-    public delegate void ConnectionAcceptedCallback(int ID);
 
     public class NetworkingService
     {
@@ -13,6 +11,10 @@ namespace SC_App.Services
 
         public class Client
         {
+            public delegate void IntroduceClientCallback(int ClientID, string Name);
+            public delegate void ConnectionAcceptedCallback(int ClientID);
+            public delegate void ChatroomMessageCallback(int ClientID, string Message, int RoomID);
+
             public static bool IsConnected;
 
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -30,14 +32,21 @@ namespace SC_App.Services
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern void SetConnectionAcceptedHandler(ConnectionAcceptedCallback callback);
 
-            /*public static void OnConnectionAccepted(int id)
-            {
-                Debug.WriteLine($"Connection accepted by the server. {id}");
-            }*/
+            [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SendChatroomMessage(string Message, int RoomID);
+
+            [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetChatroomMessageHandler(ChatroomMessageCallback callback);
+
+            [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetIntroduceClientHandler(IntroduceClientCallback callback);
+
         }
 
         public class Server
         {
+            public delegate void ClientConnectCallback(string Name, int ID);
+
             public static bool IsStarted;
 
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -61,11 +70,6 @@ namespace SC_App.Services
 
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern Int64 GetConnectedClientsCount();
-
-            /*public static void OnClientConnect(string name, int id)
-            {
-                Debug.WriteLine($"{name}[{id}] connected");
-            }*/
         }
     }
 }
