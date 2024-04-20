@@ -48,11 +48,11 @@ void ShutdownServer()
 	RakNet::RakPeerInterface::DestroyInstance(s_ServerData.PeerInterface);
 }
 
-void AddNewClient(const char* IPAddress, const char* UserName)
+void AddNewClient(RakNet::SystemAddress SystemAddress, const char* UserName)
 {
 	s_ServerData.ConnectCount++;
 	int ID = s_ServerData.ConnectCount;
-	s_ServerData.Clients[IPAddress] = ID;
+	s_ServerData.Clients[SystemAddress.ToString()] = ID;
 	s_ServerData.ClientNameMap[ID] = UserName;
 
 	CALL_HANDLER(s_ServerData.ConnectCallback, UserName, ID);
@@ -62,17 +62,20 @@ void AddNewClient(const char* IPAddress, const char* UserName)
 		RakNet::BitStream bsOut;
 		bsOut.Write(PacketID::CLIENT_DATA);
 		bsOut.Write(ID);
-		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(IPAddress), false);
+		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, SystemAddress, false);
 	}
 
 	// Send already connected clients
 	for (auto& Client : s_ServerData.Clients)
 	{
+		if (Client.second == ID)
+			continue;
+
 		RakNet::BitStream bsOut;
 		bsOut.Write(PacketID::INTRODUCE_CLIENT);
 		bsOut.Write(Client.second);
-		bsOut.Write(s_ServerData.ClientNameMap[Client.second]);
-		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(IPAddress), false);
+		bsOut.Write(s_ServerData.ClientNameMap[Client.second].c_str());
+		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, SystemAddress, false);
 	}
 
 	// Introduce connected client to already connected clients
@@ -129,7 +132,7 @@ void UpdateServer()
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(userName);
-				AddNewClient(packet->systemAddress.ToString(), userName);
+				AddNewClient(packet->systemAddress, userName);
 				break;
 			}
 
