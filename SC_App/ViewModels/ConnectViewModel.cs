@@ -82,8 +82,17 @@ namespace SC_App.ViewModels
 
                 // Instantly connect to created server as host
                 string _hostName = "host";
-                NetworkingService.ConnectToServer(HostIpAddress, HostPort, _hostName);
-                NetworkingService.IsClientConnected = true;
+                NetworkingService.IsClientConnected = NetworkingService.ConnectToServer(HostIpAddress, HostPort, _hostName);
+                if (NetworkingService.IsClientConnected)
+                {
+                    Debug.WriteLine("Connected to server successfully.");
+
+                    NetworkingService.SetConnectionAcceptedHandler(NetworkingService.OnConnectionAccepted);
+                }
+                else
+                {
+                    Debug.WriteLine("Couldnt connect to server.");
+                }
 
                 //for testing if ui update works
                 int id = 0;
