@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SC_App.Services.Navigation;
+using SC_App.Services.ServerArchServices;
 using SC_App.ViewModels;
 using System;
 
@@ -9,6 +10,7 @@ namespace SC_App
     {
         public static void AddCommonServices(this IServiceCollection collection)
         {
+            collection.AddSingleton<IServerService, ServerService>();
             collection.AddSingleton<INavigationService, NavigationService>();
             collection.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 

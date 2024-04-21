@@ -7,12 +7,8 @@ namespace SC_App.Services.Navigation
 {
     public partial class NavigationService : ViewModelBase, INavigationService
     {
-        [ObservableProperty]
-        private ViewModelBase _currentMainView;
-
-        [ObservableProperty]
-        private ViewModelBase _currentServerView;
-
+        [ObservableProperty] private ViewModelBase _currentMainView;
+        [ObservableProperty] private ViewModelBase _currentServerView;
         private Func<Type, ViewModelBase> _viewModelFactory;
 
         public NavigationService(Func<Type, ViewModelBase> viewModelFactory)

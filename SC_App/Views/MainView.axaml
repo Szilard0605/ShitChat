@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ic="using:FluentIcons.Avalonia"
              xmlns:helpers="clr-namespace:SC_App.Helpers"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SC_App.Views.MainView">
 
@@ -16,6 +18,7 @@
              OpenPaneLength="250"
              CompactPaneLength="60">
     <SplitView.Pane>
+      <Grid RowDefinitions="0.5*,*" ShowGridLines="False">
       <StackPanel Orientation="Vertical"
                   Spacing="5"
                   HorizontalAlignment="Stretch"
@@ -70,9 +73,29 @@
               </StackPanel>
             </Button.Content>
           </Button>
-          
-        </StackPanel>
+        </StackPanel>   
       </StackPanel>
+        
+        <!--ServerList-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                      Grid.Row="1">
+          <ListBox ItemsSource="{Binding ServerService.Servers}" 
+                   Background="Transparent"
+                   SelectedIndex="{Binding SelectedServerIndex, Mode=TwoWay}">
+            <i:Interaction.Behaviors>
+              <ia:EventTriggerBehavior EventName="SelectionChanged">
+                <ia:InvokeCommandAction Command="{Binding ChangeServerCommand}"/>
+              </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+        
+     </Grid>
     </SplitView.Pane>
     <Grid>
       <TransitioningContentControl Content="{Binding Navigation.CurrentMainView}" ContentTemplate="{Binding Source={StaticResource ViewLocator}}"/>

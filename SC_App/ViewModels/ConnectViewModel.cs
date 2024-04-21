@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SC_App.Helpers;
-using SC_App.Models;
 using SC_App.Services;
 using SC_App.Services.Navigation;
+using SC_App.Services.ServerArchServices;
 using SC_App.Utils;
-using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -13,66 +11,116 @@ namespace SC_App.ViewModels
 {
     public partial class ConnectViewModel : ViewModelBase
     {
-        [ObservableProperty]
-        private INavigationService _navigation;
-        public ConnectViewModel(INavigationService navigation)
+        #region Services
+
+        [ObservableProperty] private INavigationService _navigation;
+        [ObservableProperty] private IServerService _serverService;
+
+        #endregion
+
+        public ConnectViewModel(
+            INavigationService navigation,
+            IServerService serverService)
         {
             _navigation = navigation;
+            _serverService = serverService;
 
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            HostIpAddress = "192.168.1.68"; // dont hack me ples
             ConnectPort = 8080;
             HostPort = 8080;
             MaxClients = 2;
+
+            int serverIndex = ServerService.GetServersCount();
+
+            NetworkingService.Client.SetIntroduceClientHandler(OnIntroduceClient);
+            NetworkingService.Client.SetChatroomMessageHandler(OnIncomingChatroomMessage);
+            NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
+            NetworkingService.Server.SetClientConnectHandler(OnClientConnect);
+
+            void OnIntroduceClient(int clientId, string name)
+            {
+                Debug.WriteLine($"[Introduce]: {name}[{clientId}]");
+                if (clientId != 0)
+                {
+                    ServerService.AddUser(serverIndex, clientId, name);
+                }
+            }
+
+            void OnIncomingChatroomMessage(int clientId, string message, int roomId)
+            {
+                Debug.WriteLine($"[Chatroom msg]{clientId} sent \"{message}\" to Room {roomId}");
+                ServerService.Servers[0].Rooms[0].Messages.Add(message);
+            }
+
+            void OnConnectionAccepted(int id)
+            {
+                Debug.WriteLine($"Connection accepted, ID assigned: {id}");
+                ServerService.AddUser(serverIndex, id, Nickname);
+            }
+
+            void OnClientConnect(string name, int id)
+            {
+                Debug.WriteLine($"{name}[{id}] connected");
+            }
+
         }
 
-        // Host section
-        [ObservableProperty]
-        private string _hostIpAddress;
+        #region Host Properties
 
-        [ObservableProperty]
-        private int _hostPort;
+        [ObservableProperty] private string _hostIpAddress;
+        [ObservableProperty] private int _hostPort;
+        [ObservableProperty] private string _hostStatusText;
+        [ObservableProperty] private bool _isHostStatusTextVisible;
+        [ObservableProperty] private int _maxClients;
 
-        [ObservableProperty]
-        private string _hostStatusText;
+        #endregion
 
-        [ObservableProperty]
-        private bool _isHostStatusTextVisible;
-
-        [ObservableProperty]
-        private int _maxClients;
-
+        #region Host Methods
         private bool AreHostFieldsValid()
         {
             if (string.IsNullOrWhiteSpace(HostIpAddress) || string.IsNullOrWhiteSpace(HostPort.ToString()) || string.IsNullOrWhiteSpace(MaxClients.ToString()))
             {
-                HostStatusText = "Fields cannot be blank";
+                HostStatusText = Constants.StatusMessages.BLANK_FIELD;
                 IsHostStatusTextVisible = true;
                 return false;
             }
             else if (MaxClients <= 0)
             {
-                HostStatusText = "Max clients cannot be 0 or lower.";
+                HostStatusText = Constants.StatusMessages.Host.MAX_CLIENTS_LOW;
                 IsHostStatusTextVisible = true;
                 return false;
             }
             else if (!Regex.IsMatch(HostIpAddress, Constants.IPV4_REGEX))
             {
-                HostStatusText = "Ip address is not in a valid format";
+                HostStatusText = Constants.StatusMessages.INVALID_ADDRESS_FORMAT;
                 IsHostStatusTextVisible = true;
                 return false;
+            }
+            else if (ServerService.Servers.Count > 0)
+            {
+                for (int i = 0; i < ServerService.Servers.Count; i++)
+                {
+                    if (ServerService.Servers[i].IpAddress == HostIpAddress && ServerService.Servers[i].Port == HostPort)
+                    {
+                        HostStatusText = Constants.StatusMessages.Host.DUPLICATE_SERVER;
+                        IsHostStatusTextVisible = true;
+                        return false;
+                    }
+                }
             }
             IsHostStatusTextVisible = false;
             return true;
         }
 
-        private static void OnClientConnect(string Name, int ID)
-        {
-            Debug.WriteLine($"{Name}[{ID}] connected");
-        }
+        #endregion
 
-        private static void OnConnectionAccepted(int ID)
-        {
-            Debug.WriteLine($"Connection accepted, ID assigned: {ID}");
-        }
+
+        #region Host Commands
 
         [RelayCommand]
         private void StartServer()
@@ -82,57 +130,21 @@ namespace SC_App.ViewModels
                 NetworkingService.Server.IsStarted = NetworkingService.Server.StartServer(HostIpAddress, HostPort, MaxClients);
                 if (NetworkingService.Server.IsStarted)
                 {
-                    Debug.WriteLine("Successfully started server");
-                    NetworkingService.Server.SetClientConnectHandler(OnClientConnect);
+                    Navigation.NavigateTo<ConnectedServerViewModel>(INavigationService.NavDirection.Server);
                 }
                 else
                 {
                     Debug.WriteLine("Failed to start server");
+                    HostStatusText = Constants.StatusMessages.Host.UNEXPECTED_ERROR;
+                    IsHostStatusTextVisible = true;
+                    return;
                 }
 
                 // Instantly connect to created server as host
-                string _hostName = "host";
-                NetworkingService.Client.IsConnected = NetworkingService.Client.ConnectToServer(HostIpAddress, HostPort, _hostName);
-                if (NetworkingService.Client.IsConnected)
-                {
-                    Debug.WriteLine("Connected to server successfully.");
-
-                    NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
-                }
-                else
-                {
-                    Debug.WriteLine("Couldnt connect to server.");
-                }
-
-                //for testing if ui update works
-                int id = 0;
-
-                //Add server to data store
-                ServerDto.Servers.Add(new Server
-                {
-                    Id = id,
-                    IpAddress = HostIpAddress
-                });
-
-                //Add user to server
-                ServerDto.Servers[id].Users.Add(new User
-                {
-                    Name = _hostName,
-                    Id = id
-                });
-
-                //Add def room to server
-                ServerDto.Servers[id].Rooms.Add(new Room
-                {
-                    Name = "Default Room",
-                    Id = id,
-                });
-
-                //Add user to def room
-                ServerDto.Servers[id].Rooms[id].Users.Add(ServerDto.Servers[id].Users[0]);
-
-                Navigation.NavigateTo<ConnectedServerViewModel>(INavigationService.NavDirection.Server);
+                Nickname = "hostname";
+                Connect(HostIpAddress, HostPort, Nickname);
             }
+
         }
 
         [RelayCommand]
@@ -145,62 +157,86 @@ namespace SC_App.ViewModels
             }
         }
 
-        // Connect section
-        [ObservableProperty]
-        private string _connectIpAddress;
+        #endregion
 
-        [ObservableProperty]
-        private int _connectPort;
 
-        [ObservableProperty]
-        private string _connectStatusText;
+        #region Connect Properties
 
-        [ObservableProperty]
-        private bool _isConnectStatusTextVisible;
+        [ObservableProperty] private string _connectIpAddress;
+        [ObservableProperty] private int _connectPort;
+        [ObservableProperty] private string _connectStatusText;
+        [ObservableProperty] private bool _isConnectStatusTextVisible;
+        [ObservableProperty] private string _nickname;
 
-        [ObservableProperty]
-        private string _nickname;
+        #endregion
 
+
+        #region Connect Methods
         private bool AreConnectFieldsValid()
         {
             if (string.IsNullOrWhiteSpace(ConnectIpAddress) || string.IsNullOrWhiteSpace(ConnectPort.ToString()) || string.IsNullOrWhiteSpace(Nickname))
             {
-                ConnectStatusText = "Fields cannot be blank";
+                ConnectStatusText = Constants.StatusMessages.BLANK_FIELD;
                 IsConnectStatusTextVisible = true;
                 return false;
             }
             else if (Nickname.Length > Constants.MAX_NICKNAME_CHARS)
             {
-                ConnectStatusText = "Nickname cannot be longer than 7 characters";
+                ConnectStatusText = Constants.StatusMessages.Connect.LONG_NICKNAME;
                 IsConnectStatusTextVisible = true;
                 return false;
             }
             else if (!Regex.IsMatch(ConnectIpAddress, Constants.IPV4_REGEX))
             {
-                ConnectStatusText = "Ip address is not in a valid format";
+                ConnectStatusText = Constants.StatusMessages.INVALID_ADDRESS_FORMAT;
                 IsConnectStatusTextVisible = true;
                 return false;
+            }
+            else if (ServerService.Servers.Count > 0)
+            {
+                for (int i = 0; i < ServerService.Servers.Count; i++)
+                {
+                    if (ServerService.Servers[i].IpAddress == ConnectIpAddress && ServerService.Servers[i].Port == ConnectPort)
+                    {
+                        ConnectStatusText = Constants.StatusMessages.Connect.DUPLICATE_SERVER;
+                        IsConnectStatusTextVisible = true;
+                        return false;
+                    }
+                }
             }
             IsConnectStatusTextVisible = false;
             return true;
         }
+
+        private void Connect(string ipAddress, int port, string nickname)
+        {
+            int serverIndex = ServerService.GetServersCount();
+
+            NetworkingService.Client.IsConnected = NetworkingService.Client.ConnectToServer(ipAddress, port, nickname);
+            if (NetworkingService.Client.IsConnected)
+            {
+                ServerService.AddServer(serverIndex, "NewServer", ipAddress, port);
+                ServerService.AddRoom(serverIndex, 0, "Default Room");
+                Navigation.NavigateTo<ConnectedServerViewModel>(INavigationService.NavDirection.Server);
+            }
+            else
+            {
+                Debug.WriteLine("Couldnt connect to server.");
+            }
+        }
+
+        #endregion
+
+
+
+        #region Connect Commands
 
         [RelayCommand]
         private void ConnectToServer()
         {
             if (AreConnectFieldsValid())        
             {
-                NetworkingService.Client.IsConnected = NetworkingService.Client.ConnectToServer(ConnectIpAddress, ConnectPort, Nickname);
-                if (NetworkingService.Client.IsConnected)
-                {
-                    Debug.WriteLine("Connected to server successfully.");
-
-                    NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
-                }
-                else
-                {
-                    Debug.WriteLine("Couldnt connect to server.");
-                }
+                Connect(ConnectIpAddress, ConnectPort, Nickname);
             }
         }
 
@@ -213,5 +249,7 @@ namespace SC_App.ViewModels
                 NetworkingService.Client.IsConnected = false;
             }
         }
+
+        #endregion
     }
 }

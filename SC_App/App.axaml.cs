@@ -19,10 +19,10 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        AttachTimer();
+        InitializeTimer();
     }
 
-    private void AttachTimer()
+    private void InitializeTimer()
     {
         _timer.Interval = TimeSpan.FromMilliseconds(1000);
         _timer.Tick += async (sender, e) => await CheckForUpdates();

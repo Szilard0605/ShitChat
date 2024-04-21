@@ -5,8 +5,7 @@ namespace SC_App.ViewModels
 {
     public partial class ServerViewModel : ViewModelBase
     {
-        [ObservableProperty]
-        private INavigationService _navigation;
+        [ObservableProperty] private INavigationService _navigation;
 
         public ServerViewModel(INavigationService navigation)
         {

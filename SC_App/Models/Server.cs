@@ -7,13 +7,9 @@ namespace SC_App.Models
         public string Name { get; set; }
         public int Id { get; set; }
         public string IpAddress { get; set; }
-        public ObservableCollection<Room> Rooms { get; set; }
-        public ObservableCollection<User> Users { get; set; }
+        public int Port { get; set; }
+        public ObservableCollection<Room> Rooms { get; set; } = new();
+        public ObservableCollection<User> Users { get; set; } = new();
 
-        public Server()
-        {
-            Users = new();
-            Rooms = new();
-        }
     }
 }

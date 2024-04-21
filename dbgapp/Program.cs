@@ -90,7 +90,7 @@ class Program
         {
             SetClientConnectHandler(OnClientConnect);
 
-            if (StartServer("192.168.0.34", 7000, 20))
+            if (StartServer("192.168.1.68", 7000, 20))
             {
                 Console.WriteLine("Server started");
             }
@@ -114,7 +114,7 @@ class Program
             Console.WriteLine("gimme name");
             string Name = Console.ReadLine();
 
-            if (ConnectToServer("192.168.0.34", 7000, Name))
+            if (ConnectToServer("192.168.1.68", 7000, Name))
             {
                 Console.WriteLine("Connecting to server");
             }

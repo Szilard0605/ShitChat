@@ -2,32 +2,35 @@
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SC_App.Services.Navigation;
+using SC_App.Services.ServerArchServices;
 
 namespace SC_App.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private INavigationService _navigation;
 
-    [ObservableProperty]
-    private bool _isPaneOpen;
+    [ObservableProperty] private INavigationService _navigation;
+    [ObservableProperty] private IServerService _serverService;
 
-    [ObservableProperty]
-    private Symbol _paneSymbol;
-
-    public MainViewModel(INavigationService navigation)
+    public MainViewModel(
+        INavigationService navigation,
+        IServerService serverService)
     {
         _navigation = navigation;
-        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
+        _serverService = serverService;
 
+        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
         PaneSymbol = Symbol.ArrowRight;
     }
+
+    [ObservableProperty] private bool _isPaneOpen;
+    [ObservableProperty] private Symbol _paneSymbol;
+    [ObservableProperty] private int _selectedServerIndex;
 
     [RelayCommand]
     private void TriggerPane()
     {
-        IsPaneOpen = ! IsPaneOpen;
+        IsPaneOpen = !IsPaneOpen;
 
         if (IsPaneOpen)
         {
@@ -44,14 +47,22 @@ public partial class MainViewModel : ViewModelBase
     {
         Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
     }
+
     [RelayCommand]
     private void NavigateToConnect()
     {
         Navigation.NavigateTo<ConnectViewModel>(INavigationService.NavDirection.Main);
     }
+
     [RelayCommand]
     private void NavigateToSettings()
     {
         Navigation.NavigateTo<SettingsViewModel>(INavigationService.NavDirection.Main);
+    }
+
+    [RelayCommand]
+    private void ChangeServer()
+    {
+        ServerService.SelectServer(SelectedServerIndex);
     }
 }
