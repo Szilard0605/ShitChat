@@ -57,10 +57,10 @@
         <!--Content-->
         <Grid Grid.Row="1">
           <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Rooms}">
+            <ItemsControl ItemsSource="{Binding ServerService.Servers[0].Rooms[0].Messages}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <TextBlock Text="{Binding Messages}"/>
+                  <TextBlock Text="{Binding .}"/>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>

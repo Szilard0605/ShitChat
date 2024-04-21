@@ -24,7 +24,7 @@ public partial class App : Application
 
     private void InitializeTimer()
     {
-        _timer.Interval = TimeSpan.FromMilliseconds(1000);
+        _timer.Interval = TimeSpan.FromMilliseconds(500);
         _timer.Tick += async (sender, e) => await CheckForUpdates();
         _timer.Start();
     }
