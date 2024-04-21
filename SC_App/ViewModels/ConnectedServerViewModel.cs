@@ -22,7 +22,7 @@ namespace SC_App.ViewModels
             if (e.Key == Key.Enter && !string.IsNullOrWhiteSpace(Message))
             {
                 NetworkingService.Client.SendChatroomMessage(Message, 0);
-                //ServerService.SelectedServer.Rooms[0].Messages.Add(Message);
+                ServerService.Servers[0].Rooms[0].Messages.Add(Message);
                 Message = string.Empty;
             }
         }

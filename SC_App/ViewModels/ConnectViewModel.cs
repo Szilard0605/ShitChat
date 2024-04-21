@@ -14,7 +14,7 @@ namespace SC_App.ViewModels
         #region Services
 
         [ObservableProperty] private INavigationService _navigation;
-        [ObservableProperty] private IServerService _serverService;
+        [ObservableProperty] private static IServerService _serverService;
 
         #endregion
 
@@ -34,38 +34,37 @@ namespace SC_App.ViewModels
             ConnectPort = 8080;
             HostPort = 8080;
             MaxClients = 2;
-
+       
             NetworkingService.Client.SetIntroduceClientHandler(OnIntroduceClient);
             NetworkingService.Client.SetChatroomMessageHandler(OnIncomingChatroomMessage);
             NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
             NetworkingService.Server.SetClientConnectHandler(OnClientConnect);
 
         }
-
-        public void OnIntroduceClient(int clientId, string name)
+        public static void OnIntroduceClient(int clientId, string name)
         {
             Debug.WriteLine($"[Introduce]: {name}[{clientId}]");
             if (clientId != 0)
             {
-                ServerService.AddUser(0, clientId, name);
+                _serverService.AddUser(0, clientId, name);
             }
         }
 
-        public void OnIncomingChatroomMessage(int clientId, string message, int roomId)
+        public static void OnIncomingChatroomMessage(int clientId, string message, int roomId)
         {
             Debug.WriteLine($"[Chatroom msg]{clientId} sent \"{message}\" to Room {roomId}");
-            ServerService.Servers[0].Rooms[0].Messages.Add(message);
+            _serverService.Servers[0].Rooms[0].Messages.Add(message);
         }
 
-        public void OnConnectionAccepted(int id)
+        public static void OnConnectionAccepted(int id)
         {
             Debug.WriteLine($"Connection accepted, ID assigned: {id}");
         }
 
-        public void OnClientConnect(string name, int id)
+        public static void OnClientConnect(string name, int id)
         {
             Debug.WriteLine($"{name}[{id}] connected");
-            ServerService.AddUser(0, id, name);
+            _serverService.AddUser(0, id, name);
         }
 
 
