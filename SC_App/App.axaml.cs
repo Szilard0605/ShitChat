@@ -31,18 +31,25 @@ public partial class App : Application
 
     private async Task CheckForUpdates()
     {
-        // Host section
-        if (NetworkingService.Server.IsStarted)
+        try
         {
-            NetworkingService.Server.UpdateServer();
-        }
+            // Host section
+            if (NetworkingService.Server.IsStarted)
+            {
+                NetworkingService.Server.UpdateServer();
+            }
 
-        //Connect section
-        if (NetworkingService.Client.IsConnected)
+            // Connect section
+            if (NetworkingService.Client.IsConnected)
+            {
+                NetworkingService.Client.ClientUpdate();
+            }
+        }
+        catch (Exception ex)
         {
-            NetworkingService.Client.ClientUpdate();
+            // Handle the exception appropriately
+            Debug.WriteLine($"An exception occurred: {ex}");
         }
-
     }
 
     public override void OnFrameworkInitializationCompleted()

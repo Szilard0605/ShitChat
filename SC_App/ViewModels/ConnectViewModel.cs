@@ -35,40 +35,39 @@ namespace SC_App.ViewModels
             HostPort = 8080;
             MaxClients = 2;
 
-            int serverIndex = ServerService.GetServersCount();
-
             NetworkingService.Client.SetIntroduceClientHandler(OnIntroduceClient);
             NetworkingService.Client.SetChatroomMessageHandler(OnIncomingChatroomMessage);
             NetworkingService.Client.SetConnectionAcceptedHandler(OnConnectionAccepted);
             NetworkingService.Server.SetClientConnectHandler(OnClientConnect);
 
-            void OnIntroduceClient(int clientId, string name)
-            {
-                Debug.WriteLine($"[Introduce]: {name}[{clientId}]");
-                if (clientId != 0)
-                {
-                    ServerService.AddUser(serverIndex, clientId, name);
-                }
-            }
-
-            void OnIncomingChatroomMessage(int clientId, string message, int roomId)
-            {
-                Debug.WriteLine($"[Chatroom msg]{clientId} sent \"{message}\" to Room {roomId}");
-                ServerService.Servers[0].Rooms[0].Messages.Add(message);
-            }
-
-            void OnConnectionAccepted(int id)
-            {
-                Debug.WriteLine($"Connection accepted, ID assigned: {id}");
-                ServerService.AddUser(serverIndex, id, Nickname);
-            }
-
-            void OnClientConnect(string name, int id)
-            {
-                Debug.WriteLine($"{name}[{id}] connected");
-            }
-
         }
+
+        public void OnIntroduceClient(int clientId, string name)
+        {
+            Debug.WriteLine($"[Introduce]: {name}[{clientId}]");
+            if (clientId != 0)
+            {
+                ServerService.AddUser(0, clientId, name);
+            }
+        }
+
+        public void OnIncomingChatroomMessage(int clientId, string message, int roomId)
+        {
+            Debug.WriteLine($"[Chatroom msg]{clientId} sent \"{message}\" to Room {roomId}");
+            ServerService.Servers[0].Rooms[0].Messages.Add(message);
+        }
+
+        public void OnConnectionAccepted(int id)
+        {
+            Debug.WriteLine($"Connection accepted, ID assigned: {id}");
+        }
+
+        public void OnClientConnect(string name, int id)
+        {
+            Debug.WriteLine($"{name}[{id}] connected");
+            ServerService.AddUser(0, id, name);
+        }
+
 
         #region Host Properties
 
@@ -141,8 +140,8 @@ namespace SC_App.ViewModels
                 }
 
                 // Instantly connect to created server as host
-                Nickname = "hostname";
-                Connect(HostIpAddress, HostPort, Nickname);
+                string hostName = "hostname";
+                Connect(HostIpAddress, HostPort, hostName);
             }
 
         }
