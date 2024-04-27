@@ -5,6 +5,7 @@
 typedef void (*ConnectionAcceptedCallback)(int ID);
 typedef void (*ChatroomMessageCallback)(int ClientID, const char* Message, int RoomID);
 typedef void (*IntroduceClientCallback)(int ClientID, const char* Name);
+typedef void (*ClientDisconnectCallback)(int ClientID);
 
 extern "C"
 {
@@ -19,5 +20,5 @@ extern "C"
 
 	SC_EXPORT void SetIntroduceClientHandler(IntroduceClientCallback Callback);
 
-
+	SC_EXPORT void SetClientDisconnectHandler(ClientDisconnectCallback Callback);
 }

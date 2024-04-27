@@ -20,6 +20,7 @@ static RakNet::SystemAddress s_ServerSysAddr;
 static ConnectionAcceptedCallback s_ConnectionAcceptedCallback;
 static ChatroomMessageCallback s_ChatroomMessageCallback;
 static IntroduceClientCallback s_IntroduceClientCallback;
+static ClientDisconnectCallback s_ClientDisconnectCallback;
 
 struct ClientData
 {
@@ -45,7 +46,7 @@ bool ConnectToServer(const char* IP, int Port, const char* Name)
 
 void DisconnectFromServer()
 {
-	s_PeerInterface->Shutdown(1);
+	s_PeerInterface->Shutdown(0, 0, PacketPriority::HIGH_PRIORITY);
 }
 
 void ClientUpdate()
@@ -107,6 +108,16 @@ void ClientUpdate()
 				break;
 			}
 
+			case CLIENT_DISCONNECT:
+			{
+				int inID;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(inID);
+
+				CALL_HANDLER(s_ClientDisconnectCallback, inID);
+			}
+
 			default:
 			{
 				//printf("[Core]: Message with identifier %i has arrived:\n", packet->data[0]);
@@ -140,4 +151,9 @@ void SetChatroomMessageHandler(ChatroomMessageCallback Callback)
 void SetIntroduceClientHandler(IntroduceClientCallback Callback)
 {
 	s_IntroduceClientCallback = Callback;
+}
+
+void SetClientDisconnectCallback(ClientDisconnectCallback Callback)
+{
+	s_ClientDisconnectCallback = Callback;
 }

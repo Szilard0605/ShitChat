@@ -94,6 +94,17 @@ void AddNewClient(RakNet::SystemAddress SystemAddress, const char* UserName)
 
 void RemoveClient(const char* IPAddress)
 {
+	for (auto& Client : s_ServerData.Clients)
+	{
+		if (Client.first == IPAddress || s_ServerData.Clients.find(IPAddress) == s_ServerData.Clients.end())
+			continue;
+
+		RakNet::BitStream bsOut;
+		bsOut.Write(PacketID::CLIENT_DISCONNECT);
+		bsOut.Write(s_ServerData.Clients[IPAddress]);
+		s_ServerData.PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::SystemAddress(Client.first.c_str()), false);
+	}
+
 	s_ServerData.ClientNameMap.erase(GetClientIDByAddress(IPAddress));
 	s_ServerData.Clients.erase(IPAddress);
 }

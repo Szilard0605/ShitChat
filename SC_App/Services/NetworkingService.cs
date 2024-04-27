@@ -14,6 +14,7 @@ namespace SC_App.Services
             public delegate void IntroduceClientCallback(int ClientID, string Name);
             public delegate void ConnectionAcceptedCallback(int ClientID);
             public delegate void ChatroomMessageCallback(int ClientID, string Message, int RoomID);
+            public delegate void ClientDisconnectCallback(int ClientID);
 
             public static bool IsConnected;
 
@@ -40,6 +41,9 @@ namespace SC_App.Services
 
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern void SetIntroduceClientHandler(IntroduceClientCallback callback);
+
+            [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetClientDisconnectHandler(ClientDisconnectCallback callback);
 
         }
 
