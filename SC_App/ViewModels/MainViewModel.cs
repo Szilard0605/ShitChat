@@ -1,68 +1,43 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Common;
+using Material.Icons;
+using SC_App.DTOs;
 using SC_App.Services.Navigation;
-using SC_App.Services.ServerArchServices;
+using System.Collections.ObjectModel;
 
-namespace SC_App.ViewModels;
-
-public partial class MainViewModel : ViewModelBase
+namespace SC_App.ViewModels
 {
-
-    [ObservableProperty] private INavigationService _navigation;
-    [ObservableProperty] private IServerService _serverService;
-
-    public MainViewModel(
-        INavigationService navigation,
-        IServerService serverService)
+    public partial class MainViewModel : ViewModelBase
     {
-        _navigation = navigation;
-        _serverService = serverService;
+        [ObservableProperty] private ServerDTO _serverDTO;
+        [ObservableProperty] private ObservableCollection<NavItem> _navList;
+        [ObservableProperty] private INavigationService _navService;
 
-        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
-        PaneSymbol = Symbol.ArrowRight;
-    }
-
-    [ObservableProperty] private bool _isPaneOpen;
-    [ObservableProperty] private Symbol _paneSymbol;
-    [ObservableProperty] private int _selectedServerIndex;
-
-    [RelayCommand]
-    private void TriggerPane()
-    {
-        IsPaneOpen = !IsPaneOpen;
-
-        if (IsPaneOpen)
+        public MainViewModel(INavigationService navService, ServerDTO serverDTO)
         {
-            PaneSymbol = Symbol.ArrowLeft;
+            _navService = navService;
+            _serverDTO = serverDTO;
+
+            NavService.NavigateTo<HomeViewModel>();
+
+            NavList = new ObservableCollection<NavItem>
+            {
+                new NavItem{ Title = "Home", Icon = MaterialIconKind.Home },
+                new NavItem{ Title = "Settings", Icon = MaterialIconKind.Settings },
+            };
         }
-        else
+
+        [RelayCommand]
+        private void NavigateToHomeView()
         {
-            PaneSymbol = Symbol.ArrowRight;
+            ServerDTO.SelectedServer = null;
+            NavService.NavigateTo<HomeViewModel>();
         }
     }
 
-    [RelayCommand]
-    private void NavigateToServer()
+    public class NavItem
     {
-        Navigation.NavigateTo<ServerViewModel>(INavigationService.NavDirection.Main);
-    }
-
-    [RelayCommand]
-    private void NavigateToConnect()
-    {
-        Navigation.NavigateTo<ConnectViewModel>(INavigationService.NavDirection.Main);
-    }
-
-    [RelayCommand]
-    private void NavigateToSettings()
-    {
-        Navigation.NavigateTo<SettingsViewModel>(INavigationService.NavDirection.Main);
-    }
-
-    [RelayCommand]
-    private void ChangeServer()
-    {
-        ServerService.SelectServer(SelectedServerIndex);
+        public string Title { get; set; }
+        public MaterialIconKind Icon { get; set; }
     }
 }

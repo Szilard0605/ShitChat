@@ -1,15 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.ObjectModel;
 
 namespace SC_App.Models
 {
-    public class Server
+    public partial class Server : ObservableObject
     {
-        public string Name { get; set; }
-        public int Id { get; set; }
-        public string IpAddress { get; set; }
-        public int Port { get; set; }
-        public ObservableCollection<Room> Rooms { get; set; } = new();
-        public ObservableCollection<User> Users { get; set; } = new();
+        [ObservableProperty] public string _name;
+        public Guid Id { get; set; }
+        [ObservableProperty] public string _ipAddress;
+        [ObservableProperty] public int _port;
+        [ObservableProperty] public ObservableCollection<Room> _rooms;
+        [ObservableProperty] public ObservableCollection<User> _users;
 
     }
 }

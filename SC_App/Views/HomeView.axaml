@@ -1,0 +1,267 @@
+<UserControl
+    x:Class="SC_App.Views.HomeView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+    xmlns:icons="using:Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:SC_App.ViewModels;assembly=SC_App"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Border
+        Margin="10"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Background="{DynamicResource SecondaryBrush}"
+        BorderThickness="1"
+        BoxShadow="0 2 10 black"
+        CornerRadius="10">
+
+        <Grid ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border BorderBrush="{DynamicResource PrimaryBrush}" BorderThickness="0,0,0,2">
+                <Grid>
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            Width="100"
+                            Height="40"
+                            Margin="10,10,0,10"
+                            Background="Transparent">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Text="Servers" />
+                        </Button>
+
+                        <Button
+                            Width="100"
+                            Height="40"
+                            Margin="10,10,0,10"
+                            Background="Transparent">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Text="Friends" />
+                        </Button>
+                    </StackPanel>
+
+
+                    <Button
+                        Width="30"
+                        Height="30"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        Command="{Binding ChangeConnectionTabStatusCommand}"
+                        IsVisible="{Binding !IsConnectionTabVisible}">
+                        <icons:MaterialIcon
+                            Width="30"
+                            Height="30"
+                            Kind="Add" />
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!--  Server Cards  -->
+            <Border Grid.Row="1">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding ServerDTO.Servers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Width="300"
+                                    Height="160"
+                                    Margin="8"
+                                    Background="{DynamicResource PrimaryBrush}"
+                                    BoxShadow="0 2 10 Black"
+                                    CornerRadius="10">
+
+                                    <i:Interaction.Behaviors>
+                                        <ia:EventTriggerBehavior EventName="PointerPressed">
+                                            <ia:InvokeCommandAction Command="{Binding DataContext.NavigateToServerViewCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                        </ia:EventTriggerBehavior>
+                                    </i:Interaction.Behaviors>
+
+                                    <Grid>
+                                        <StackPanel
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Orientation="Horizontal">
+                                            <icons:MaterialIcon Kind="Users" />
+                                            <TextBlock Margin="10" Text="{Binding Users.Count}" />
+                                        </StackPanel>
+
+                                        <TextBlock
+                                            Margin="10"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Bottom"
+                                            Text="{Binding Name}" />
+                                    </Grid>
+
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+
+            <!--  Connect / Create Tab  -->
+            <Border
+                Grid.RowSpan="2"
+                Width="260"
+                HorizontalAlignment="Right"
+                BoxShadow="1 0 10 black"
+                CornerRadius="0,10,10,0"
+                IsVisible="{Binding IsConnectionTabVisible}">
+
+                <Border.Background>
+                    <SolidColorBrush Opacity="1" Color="{DynamicResource PrimaryColor}" />
+                </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--  Collapse Button and Header  -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Margin="10,15,10,10"
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            Command="{Binding ChangeConnectionTabStatusCommand}">
+                            <icons:MaterialIcon
+                                Width="30"
+                                Height="30"
+                                Kind="ChevronRight" />
+                        </Button>
+
+                        <TextBlock
+                            Margin="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Text="Connect / Create" />
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+
+                        <Grid.Styles>
+                            <Style Selector="TextBox">
+                                <Setter Property="Background" Value="{DynamicResource SecondaryBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                <Setter Property="CornerRadius" Value="0" />
+                            </Style>
+
+                            <Style Selector="TextBox:pointerover /template/ Border">
+                                <Setter Property="Background" Value="{DynamicResource SecondaryBrush}" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                <Setter Property="CornerRadius" Value="0" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBrush}" />
+                            </Style>
+
+                            <Style Selector="TextBox:focus /template/ Border">
+                                <Setter Property="Background" Value="{DynamicResource SecondaryBrush}" />
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="CornerRadius" Value="0" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource TertiaryBrush}" />
+                            </Style>
+                        </Grid.Styles>
+
+                        <StackPanel
+                            Margin="10"
+                            VerticalAlignment="Top"
+                            Spacing="10">
+                            <TextBox
+                                Width="240"
+                                Height="50"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Watermark="IP Address" />
+                            <TextBox
+                                Width="240"
+                                Height="50"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Center"
+                                Watermark="Port" />
+
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="10">
+                                <Button
+                                    Height="50"
+                                    Margin="0,20,0,0"
+                                    HorizontalAlignment="Center"
+                                    Background="{DynamicResource PrimaryTextBrush}"
+                                    CornerRadius="5"
+                                    Foreground="{DynamicResource PrimaryBrush}">
+
+                                    <TextBlock
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Text="Connect" />
+                                </Button>
+
+                                <Button
+                                    Height="50"
+                                    Margin="0,20,0,0"
+                                    HorizontalAlignment="Center"
+                                    Background="{DynamicResource PrimaryTextBrush}"
+                                    CornerRadius="5"
+                                    Foreground="{DynamicResource PrimaryBrush}">
+
+                                    <TextBlock
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Text="Create" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+
+                    </Grid>
+
+
+                </Grid>
+
+
+            </Border>
+
+        </Grid>
+
+    </Border>
+
+</UserControl>

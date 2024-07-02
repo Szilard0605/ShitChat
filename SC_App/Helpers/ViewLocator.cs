@@ -1,9 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using MvvmHelpers;
 using SC_App.ViewModels;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace SC_App.Helpers
 {

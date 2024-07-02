@@ -1,14 +1,17 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
 
 namespace SC_App.Models
 {
-    public class Room
+    public partial class Room : ObservableObject
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ObservableCollection<User> Users { get; set; } = new();
-        public ObservableCollection<string> Messages { get; set; } = new();
+        public Guid Id { get; set; }
+
+        [ObservableProperty] private string _name;
+        [ObservableProperty] private bool _isSelected;
+        [ObservableProperty] private ObservableCollection<Message> _messages;
+        [ObservableProperty] private ObservableCollection<User> _users;
 
     }
 }
