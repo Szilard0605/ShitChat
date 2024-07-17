@@ -1,16 +1,17 @@
 #include "NetClient.h"
 
 
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "BitStream.h"
-#include "RakNetTypes.h"
-#include "Gets.h"
+#include "Networking/RakNet/RakPeerInterface.h"
+#include "Networking/RakNet/MessageIdentifiers.h"
+#include "Networking/RakNet/BitStream.h"
+#include "Networking/RakNet/RakNetTypes.h"
+#include "Networking/RakNet/Gets.h"
 
-#include "Networking/Common/PacketIdentifiers.h"
+#include "PacketIdentifiers.h"
 #include "Networking/Common/Utils.h"
 
 #include <string>
+#include "Networking/RakNet/RakNetTypes.h"
 
 static RakNet::RakPeerInterface* s_PeerInterface;
 static RakNet::SystemAddress s_ServerSysAddr;
@@ -46,7 +47,7 @@ bool ConnectToServer(const char* IP, int Port, const char* Name)
 
 void DisconnectFromServer()
 {
-	s_PeerInterface->Shutdown(0, 0, PacketPriority::HIGH_PRIORITY);
+	s_PeerInterface->CloseConnection(s_ServerSysAddr, true);
 }
 
 void ClientUpdate()

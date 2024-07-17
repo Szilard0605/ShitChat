@@ -34,10 +34,10 @@ public partial class App : Application
         try
         {
             // Host section
-            if (NetworkingService.Server.IsStarted)
+            /*if (NetworkingService.Server.IsStarted)
             {
                 NetworkingService.Server.UpdateServer();
-            }
+            }*/
 
             // Connect section
             if (NetworkingService.Client.IsConnected)

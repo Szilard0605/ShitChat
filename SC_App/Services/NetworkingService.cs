@@ -47,7 +47,7 @@ namespace SC_App.Services
 
         }
 
-        public class Server
+        /*public class Server
         {
             public delegate void ClientConnectCallback(string Name, int ID);
 
@@ -74,6 +74,6 @@ namespace SC_App.Services
 
             [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern Int64 GetConnectedClientsCount();
-        }
+        }*/
     }
 }

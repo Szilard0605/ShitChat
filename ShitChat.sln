@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC_App.Desktop", "SC_App.De
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dbgapp", "dbgapp\dbgapp.csproj", "{9A114A58-9418-4578-879F-0F13ACD5D43F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SC_Server", "SC_Server\SC_Server.vcxproj", "{7F0D6B64-3972-4134-A301-015D12ADFD1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,18 @@ Global
 		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x64.Build.0 = Release|x64
 		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x86.ActiveCfg = Release|Any CPU
 		{9A114A58-9418-4578-879F-0F13ACD5D43F}.Release|x86.Build.0 = Release|Any CPU
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|Any CPU.Build.0 = Debug|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|x64.ActiveCfg = Debug|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|x64.Build.0 = Debug|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|x86.ActiveCfg = Debug|Win32
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Debug|x86.Build.0 = Debug|Win32
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|Any CPU.ActiveCfg = Release|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|Any CPU.Build.0 = Release|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|x64.ActiveCfg = Release|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|x64.Build.0 = Release|x64
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|x86.ActiveCfg = Release|Win32
+		{7F0D6B64-3972-4134-A301-015D12ADFD1D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

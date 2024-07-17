@@ -1,20 +1,16 @@
 ﻿
+using Microsoft.VisualBasic;
 using System.ComponentModel.Design;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
+
 
 class Program
 {
     //hardcoded dll path //a budos kurva anyjat neki amugy
     private const string SC_CoreDLL = @"SC_Core.dll";
 
-    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool StartServer(string ip, int port, int maxClients);
-
-    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ShutdownServer();
-
-    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateServer();
 
     [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool ConnectToServer(string ip, int port, string name);
@@ -78,51 +74,98 @@ class Program
         Console.WriteLine($"Connected! Assigned ID: {ID}");
     }
 
+    private enum CtrlType
+    {
+        CTRL_C_EVENT = 0,
+        CTRL_BREAK_EVENT = 1,
+        CTRL_CLOSE_EVENT = 2,
+        CTRL_LOGOFF_EVENT = 5,
+        CTRL_SHUTDOWN_EVENT = 6
+    }
+
+
+    [DllImport("Kernel32")]
+    private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
+
+    private delegate bool EventHandler(CtrlType sig);
+    static EventHandler _handler;
+    private static bool Handler(CtrlType signal)
+    {
+
+        switch (signal)
+        {
+            case CtrlType.CTRL_BREAK_EVENT:
+            case CtrlType.CTRL_C_EVENT:
+            case CtrlType.CTRL_LOGOFF_EVENT:
+            case CtrlType.CTRL_SHUTDOWN_EVENT:
+            case CtrlType.CTRL_CLOSE_EVENT:
+                Console.Beep();
+                DisconnectFromServer();
+                Thread.Sleep(100);
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
+
     public static void Main()
     {
 
-        int option = 0;
+        SetIntroduceClientHandler(OnIntroduceClient);
+        SetChatroomMessageHandler(OnIncomingChatroomMessage);
+        SetConnectionAcceptedHandler(OnConnectionAccepted);
 
-        Console.WriteLine("1 client, 2 server");
-        option = int.Parse(s: Console.ReadLine());
+        Console.WriteLine("gimme name");
+        string? Name = Console.ReadLine();
 
-        if (option == 2)
+        if (Name == null)
+            return;
+
+        if (ConnectToServer("127.0.0.1", 7000, Name))
         {
-            SetClientConnectHandler(OnClientConnect);
-
-            if (StartServer("192.168.1.68", 7000, 20))
-            {
-                Console.WriteLine("Server started");
-            }
-            else
-            {
-                Console.WriteLine("Couldn't start server");
-            }
-
-            while (true)
-            {
-                UpdateServer();
-            }
+            Console.WriteLine("Connecting to server");
         }
-        else
+        else Console.WriteLine("Couldn't connect to server");
+
+
+        _handler += new EventHandler(Handler);
+
+        // Register the handler
+        if (!SetConsoleCtrlHandler(_handler, true))
         {
+            Console.WriteLine("Failed to set Console Control Handler");
+        }
 
-            SetIntroduceClientHandler(OnIntroduceClient);
-            SetChatroomMessageHandler(OnIncomingChatroomMessage);
-            SetConnectionAcceptedHandler(OnConnectionAccepted);
+        while (true)
+        {
+            ClientUpdate();
 
-            Console.WriteLine("gimme name");
-            string Name = Console.ReadLine();
-
-            if (ConnectToServer("192.168.1.68", 7000, Name))
+            if (Console.KeyAvailable)
             {
-                Console.WriteLine("Connecting to server");
-            }
-            else Console.WriteLine("Couldn't connect to server");
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.Key)
+                {
 
-            while(true)
-            {
-                ClientUpdate();
+                    case ConsoleKey.F1:
+                    {
+                        Console.WriteLine("Sent chatroom message");
+                        SendChatroomMessage("FAASGMNLASGFASTZ", 69);
+                        break;
+                    }
+
+
+                    case ConsoleKey.F2:
+                    {
+                        DisconnectFromServer();
+                        Console.WriteLine("Disconnected from server.");
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
             }
         }
     }
