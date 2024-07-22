@@ -360,6 +360,9 @@
     <ClCompile Include="src\CUser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CUserManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CServer.h">
@@ -834,6 +837,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CUser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CUserManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

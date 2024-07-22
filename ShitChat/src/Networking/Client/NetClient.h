@@ -5,7 +5,7 @@
 typedef void (*ConnectionAcceptedCallback)(int ID);
 typedef void (*ChatroomMessageCallback)(int ClientID, const char* Message, int RoomID);
 typedef void (*IntroduceClientCallback)(int ClientID, const char* Name);
-typedef void (*ClientDisconnectCallback)(int ClientID);
+typedef void (*ClientDisconnectCallback)(const char* Name, int ClientID);
 
 extern "C"
 {

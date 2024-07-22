@@ -26,6 +26,9 @@ class Program
     public static extern void SetClientConnectHandler(ClientConnectCallback callback);
     public delegate void ClientConnectCallback(string Name, int ID);
 
+    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetClientDisconnectHandler(ClientDisconnectCallback Callback);
+    public delegate void ClientDisconnectCallback(string Name, int ID);
     // Client side event
     // gets called when the server accepts the connection,
     // and sends the client's ID
@@ -74,6 +77,11 @@ class Program
         Console.WriteLine($"Connected! Assigned ID: {ID}");
     }
 
+    public static void OnClientDisconnect(string Name, int ID)
+    {
+        Console.WriteLine($"{Name} [{ID}] disconnected");
+    }
+
     private enum CtrlType
     {
         CTRL_C_EVENT = 0,
@@ -99,7 +107,6 @@ class Program
             case CtrlType.CTRL_LOGOFF_EVENT:
             case CtrlType.CTRL_SHUTDOWN_EVENT:
             case CtrlType.CTRL_CLOSE_EVENT:
-                Console.Beep();
                 DisconnectFromServer();
                 Thread.Sleep(100);
                 return false;
@@ -114,6 +121,7 @@ class Program
     {
 
         SetIntroduceClientHandler(OnIntroduceClient);
+        SetClientDisconnectHandler(OnClientDisconnect);
         SetChatroomMessageHandler(OnIncomingChatroomMessage);
         SetConnectionAcceptedHandler(OnConnectionAccepted);
 

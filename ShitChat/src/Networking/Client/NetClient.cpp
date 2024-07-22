@@ -112,11 +112,12 @@ void ClientUpdate()
 			case CLIENT_DISCONNECT:
 			{
 				int inID;
+				RakNet::RakString Name;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(inID);
-
-				CALL_HANDLER(s_ClientDisconnectCallback, inID);
+				bsIn.Read(Name);
+				CALL_HANDLER(s_ClientDisconnectCallback, Name.C_String(), inID);
 			}
 
 			default:
@@ -154,7 +155,7 @@ void SetIntroduceClientHandler(IntroduceClientCallback Callback)
 	s_IntroduceClientCallback = Callback;
 }
 
-void SetClientDisconnectCallback(ClientDisconnectCallback Callback)
+void SetClientDisconnectHandler(ClientDisconnectCallback Callback)
 {
 	s_ClientDisconnectCallback = Callback;
 }

@@ -135,6 +135,7 @@
     <ClCompile Include="src\CRoom.cpp" />
     <ClCompile Include="src\CRoomManager.cpp" />
     <ClCompile Include="src\CServer.cpp" />
+    <ClCompile Include="src\CUserManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\RakNet\Base64Encoder.cpp" />
     <ClCompile Include="src\RakNet\BitStream.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="src\CRoom.h" />
     <ClInclude Include="src\CRoomManager.h" />
     <ClInclude Include="src\CServer.h" />
+    <ClInclude Include="src\CUserManager.h" />
     <ClInclude Include="src\RakNet\AutopatcherPatchContext.h" />
     <ClInclude Include="src\RakNet\AutopatcherRepositoryInterface.h" />
     <ClInclude Include="src\RakNet\Base64Encoder.h" />
