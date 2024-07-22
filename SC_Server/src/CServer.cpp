@@ -112,7 +112,7 @@ void CServer::Update()
 			
 			if(result == ROOM_REQUEST_RESULT::ROOM_CREATED)
 				printf("%s [%d] created a room named %s\n", user.GetName().c_str(), user.GetID(), Name.C_String());
-			if(result == ROOM_REQUEST_RESULT::NAME_ALREADE_EXISTS)
+			if(result == ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS)
 				printf("%s [%d] failed to create a room named %s, because a room with this name already exists\n", user.GetName().c_str(), user.GetID(), Name.C_String());
 			break;
 		}

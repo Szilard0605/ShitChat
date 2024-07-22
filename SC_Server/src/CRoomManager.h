@@ -8,7 +8,7 @@ enum class ROOM_REQUEST_RESULT : uint32_t
 {
 	NONE = 0,
 	ROOM_CREATED,
-	NAME_ALREADE_EXISTS
+	NAME_ALREADY_EXISTS
 };
 
 class CRoomManager
