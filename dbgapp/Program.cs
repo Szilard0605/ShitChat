@@ -57,6 +57,10 @@ class Program
     public static extern void SetIntroduceClientHandler(IntroduceClientCallback callback);
     public delegate void IntroduceClientCallback(int ClientID, string Name);
 
+    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+
+    public unsafe static extern void RequestNewRoom(string Name, UInt32* Result);
+
     public static void OnClientConnect(string name, int id)
     {
         Console.WriteLine($"{name}[{id}] connected");
@@ -146,10 +150,10 @@ class Program
             Console.WriteLine("Failed to set Console Control Handler");
         }
 
+
         while (true)
         {
             ClientUpdate();
-
             if (Console.KeyAvailable)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -171,11 +175,32 @@ class Program
                         break;
                     }
 
+
+                    case ConsoleKey.F3:
+                    {
+                        unsafe
+                        {
+                            UInt32 Result = 0;
+                            string RoomName = "TesztRoom";
+                            RequestNewRoom(RoomName, &Result);
+
+                            while(Result == 0)
+                            {
+                               ClientUpdate();
+
+                                if (Result == 1)
+                                    Console.WriteLine("Room created successfully");
+                                if (Result == 2)
+                                    Console.WriteLine($"Room with name {RoomName} already exists");
+                            }
+                        }
+                        break;
+                    }
+
                     default:
                         break;
                 }
             }
         }
     }
-    
  };
