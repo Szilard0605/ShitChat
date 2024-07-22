@@ -40,6 +40,9 @@ void CRoom::SendChatMessage(UserID User, std::string Message)
 
 		CUser& user = server->GetUserManager()->GetUserByID(m_Users[i]);
 
+		if (!user.IsActive())
+			continue;
+
 		std::string clientAddr = user.GetAddress().ToString();
 		int clientID = m_Users[i];
 

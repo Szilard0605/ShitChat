@@ -12,11 +12,12 @@ ROOM_REQUEST_RESULT CRoomManager::NewRoom(std::string Name)
 	for (int i = 0; i < m_MaxRooms; i++)
 	{
 		if (m_Rooms[i].GetName() == Name)
-			result == ROOM_REQUEST_RESULT::NAME_ALREADE_EXISTS;
+			result = ROOM_REQUEST_RESULT::NAME_ALREADE_EXISTS;
 
 		if (!m_Rooms[i].IsActive())
 		{
 			m_Rooms[i] = CRoom(i, Name);
+			result = ROOM_REQUEST_RESULT::ROOM_CREATED;
 		}
 	}
 	return result;

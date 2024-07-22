@@ -29,6 +29,8 @@ struct ClientData
 	int ID;
 } s_ClientData;
 
+static uint32_t* s_RoomRequestResultPtr = nullptr;
+
 bool ConnectToServer(const char* IP, int Port, const char* Name)
 {
 	s_ClientData.Name = Name;
@@ -117,7 +119,22 @@ void ClientUpdate()
 				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(inID);
 				bsIn.Read(Name);
+				
 				CALL_HANDLER(s_ClientDisconnectCallback, Name.C_String(), inID);
+				break;
+			}
+
+			case CREATE_ROOM_REQUEST:
+			{
+				uint32_t result;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(result);
+
+				if (s_RoomRequestResultPtr)
+					*s_RoomRequestResultPtr = result;
+
+				break;
 			}
 
 			default:
@@ -143,6 +160,16 @@ void SendChatroomMessage(const char* Message, int RoomID)
 	bsOut.Write(Message);
 	s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, s_ServerSysAddr, false);
 
+}
+
+void RequestNewRoom(const char* Name, uint32_t* ResultPtr)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(PacketID::CREATE_ROOM_REQUEST);
+	bsOut.Write(Name);
+	s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, s_ServerSysAddr, false);
+
+	s_RoomRequestResultPtr = ResultPtr;
 }
 
 void SetChatroomMessageHandler(ChatroomMessageCallback Callback)

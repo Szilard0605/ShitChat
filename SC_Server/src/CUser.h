@@ -15,6 +15,8 @@ public:
 
 	CUser(RakNet::SystemAddress Address, int ID, const std::string Name);
 
+	void SendBitStream(RakNet::BitStream* BitStream);
+
 	inline bool IsActive() const { return (m_ID != -1); }
 	inline std::string GetName() const { return m_Name; }
 	inline RakNet::SystemAddress GetAddress() { return m_Address; }
