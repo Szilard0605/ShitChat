@@ -15,6 +15,7 @@ public:
 	void AddUser(std::string Name, RakNet::SystemAddress Address);
 	void RemoveUser(RakNet::SystemAddress Address);
 	int GetUserCount();
+	void IntroduceUser(CUser& user);
 
 	void SendBitStreamToAllUsers(RakNet::BitStream* BitStream);
 	

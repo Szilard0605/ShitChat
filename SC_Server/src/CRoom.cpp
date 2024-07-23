@@ -60,12 +60,9 @@ void CRoom::SendChatMessage(UserID FromUser, std::string Message)
 	CServer* server = CServer::GetInstance();
 	for (int i = 0; i < m_UserCount; i++)
 	{
-		if (m_Users[i] == -1)
-			continue;
-
 		CUser& toUser = server->GetUserManager()->GetUserByID(m_Users[i]);
-
-		if (!toUser.IsActive())
+		
+		if (!toUser.IsValid())
 			continue;
 
 		// Send client data to server

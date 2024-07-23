@@ -17,7 +17,7 @@ public:
 
 	void SendBitStream(RakNet::BitStream* BitStream);
 
-	inline bool IsActive() const { return (m_ID != -1); }
+	inline bool IsValid() const { return (m_ID != -1); }
 	inline std::string GetName() const { return m_Name; }
 	inline RakNet::SystemAddress GetAddress() { return m_Address; }
 	inline void Deactivate() { m_ID = -1; }
