@@ -23,6 +23,16 @@ public:
 	inline void Deactivate() { m_ID = -1; }
 	int GetID() { return m_ID; }
 
+	bool operator == (CUser& other)
+	{
+		return this->m_ID == other.GetID();
+	}
+
+	bool operator != (CUser& other)
+	{
+		return this->m_ID != other.GetID();
+	}
+
 private:
 	RakNet::SystemAddress m_Address;
 	int m_ID = -1;

@@ -22,6 +22,7 @@ static ConnectionAcceptedCallback s_ConnectionAcceptedCallback;
 static ChatroomMessageCallback s_ChatroomMessageCallback;
 static IntroduceClientCallback s_IntroduceClientCallback;
 static ClientDisconnectCallback s_ClientDisconnectCallback;
+static RoomJoinNotificationCallback s_RoomJoinNotiCallback;
 
 struct ClientData
 {
@@ -79,6 +80,8 @@ void ClientUpdate()
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(PacketID));
 				bsIn.Read(inID);
+
+				s_ClientData.ID = inID;
 	
 				CALL_HANDLER(s_ConnectionAcceptedCallback, inID);
 				break;
@@ -137,6 +140,20 @@ void ClientUpdate()
 				break;
 			}
 
+			case ROOM_JOIN_NOTIFICATION:
+			{
+				int RoomID, ClientID;
+				RakNet::RakString Name;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(RoomID);
+				bsIn.Read(ClientID);
+				bsIn.Read(Name);
+
+				CALL_HANDLER(s_RoomJoinNotiCallback, RoomID, ClientID, Name.C_String());
+				break;
+			}
+
 			default:
 			{
 				//printf("[Core]: Message with identifier %i has arrived:\n", packet->data[0]);
@@ -149,6 +166,18 @@ void ClientUpdate()
 void SetConnectionAcceptedHandler(ConnectionAcceptedCallback Callback)
 {
 	s_ConnectionAcceptedCallback = Callback;
+}
+
+void JoinRoom(int RoomID)
+{
+	printf("my id: %d\n", s_ClientData.ID);
+
+	// Send client data to server
+	RakNet::BitStream bsOut;
+	bsOut.Write(PacketID::JOIN_ROOM);
+	bsOut.Write(RoomID);
+	bsOut.Write(s_ClientData.ID);
+	s_PeerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, s_ServerSysAddr, false);
 }
 
 void SendChatroomMessage(const char* Message, int RoomID)
@@ -175,6 +204,11 @@ void RequestNewRoom(const char* Name, uint32_t* ResultPtr)
 void SetChatroomMessageHandler(ChatroomMessageCallback Callback)
 {
 	s_ChatroomMessageCallback = Callback;
+}
+
+void SetRoomJoinNotificationHandler(RoomJoinNotificationCallback Callback)
+{
+	s_RoomJoinNotiCallback = Callback;
 }
 
 void SetIntroduceClientHandler(IntroduceClientCallback Callback)

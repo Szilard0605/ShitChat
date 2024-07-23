@@ -28,11 +28,6 @@ public:
 
 	void SendBitStream(CUser User, RakNet::BitStream* BitStream);
 
-	int GetClientIDByAddress(const char* Address);
-	const char* GetClientAddressByID(int ID);
-
-	__int64 GetConnectedClientsCount();
-
 	CUserManager* GetUserManager() { return m_UserManager; }
 	CRoomManager* GetRoomManager() { return m_RoomManager; }
 private:
@@ -43,8 +38,6 @@ private:
 	CUserManager* m_UserManager;
 	CRoomManager* m_RoomManager;
 
-	std::unordered_map<std::string, int> m_ClientIDMap;
-	std::unordered_map<int, std::string> m_ClientNameMap;
 
 	RakNet::RakPeerInterface* m_PeerInterface;
 };

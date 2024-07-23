@@ -10,13 +10,38 @@
 CRoom::CRoom(int ID, std::string Name, int MaxUsers)
 	: m_ID(ID), m_Name(Name), m_MaxUsers(MaxUsers)
 {
-	m_Users.resize(MaxUsers * sizeof(int));
+	m_Users.resize(MaxUsers * sizeof(int), -1);
+	m_MessageMap.clear();
 }
 
 void CRoom::AddUser(CUser user)
 {
-	m_UserCount++;
+	// discard if user is already in the room
+	if (std::find(m_Users.begin(), m_Users.end(), user.GetID()) != m_Users.end())
+	{
+		printf("User %s[%d] is already in the room %s [%d]\n", user.GetName().c_str(), user.GetID(), m_Name.c_str(), m_ID);
+		return;
+	}
 	m_Users[m_UserCount] = user.GetID();
+	m_UserCount++;
+	// Notify all clients in room of this join
+
+	RakNet::BitStream bsOut;
+	bsOut.Write(PacketID::ROOM_JOIN_NOTIFICATION);
+	bsOut.Write(m_ID);
+	bsOut.Write(user.GetID());
+	bsOut.Write(user.GetName().c_str());
+
+	for (int i = 0; i < m_UserCount; i ++)
+	{
+		/*if (m_Users[i] == user.GetID())
+			continue;*/
+
+		CUser& sendUser = CServer::GetInstance()->GetUserManager()->GetUserByID(m_Users[i]);
+		sendUser.SendBitStream(&bsOut);
+	}
+
+	printf("%s [%d] joined room ID: %d\n", user.GetName().c_str(), user.GetID(), m_ID);
 }
 
 void CRoom::RemoveUser(CUser user)
@@ -30,7 +55,7 @@ void CRoom::RemoveUser(CUser user)
 	m_UserCount --;
 }
 
-void CRoom::SendChatMessage(UserID User, std::string Message)
+void CRoom::SendChatMessage(UserID FromUser, std::string Message)
 {
 	CServer* server = CServer::GetInstance();
 	for (int i = 0; i < m_UserCount; i++)
@@ -38,23 +63,22 @@ void CRoom::SendChatMessage(UserID User, std::string Message)
 		if (m_Users[i] == -1)
 			continue;
 
-		CUser& user = server->GetUserManager()->GetUserByID(m_Users[i]);
+		CUser& toUser = server->GetUserManager()->GetUserByID(m_Users[i]);
 
-		if (!user.IsActive())
+		if (!toUser.IsActive())
 			continue;
 
-		std::string clientAddr = user.GetAddress().ToString();
-		int clientID = m_Users[i];
-
-		
 		// Send client data to server
 		RakNet::BitStream bsOut;
 		bsOut.Write(PacketID::CHATROOM_MESSAGE);
-		bsOut.Write(User);
+		bsOut.Write(FromUser);
 		bsOut.Write(m_ID);
 		bsOut.Write(Message);
-		server->SendBitStream(user, &bsOut);
+		server->SendBitStream(toUser, &bsOut);
 
-		printf("[Room %d] %s: %s\n", m_ID, user.GetName().c_str(), Message.c_str());
+		m_MessageMap[m_MessageCount] = Message;
+		m_MessageCount++;
+
+		printf("[Room %d, MSGID: %d] %s: %s\n", m_ID, m_MessageCount, toUser.GetName().c_str(), Message.c_str());
 	}
 }

@@ -100,20 +100,33 @@ void CServer::Update()
 			bsIn.Read(Name);
 
 			ROOM_REQUEST_RESULT result = m_RoomManager->NewRoom(Name.C_String());
-
-			// Create room for all clients (if request was succesful)
-
+			
 			RakNet::BitStream bsOut;
 			bsOut.Write(PacketID::CREATE_ROOM_REQUEST);
 			bsOut.Write(result);
 			m_UserManager->GetUserByAddress(packet->systemAddress).SendBitStream(&bsOut);
 
 			CUser user = m_UserManager->GetUserByAddress(packet->systemAddress);
-			
-			if(result == ROOM_REQUEST_RESULT::ROOM_CREATED)
+
+			if (result == ROOM_REQUEST_RESULT::ROOM_CREATED)
 				printf("%s [%d] created a room named %s\n", user.GetName().c_str(), user.GetID(), Name.C_String());
-			if(result == ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS)
+			if (result == ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS)
 				printf("%s [%d] failed to create a room named %s, because a room with this name already exists\n", user.GetName().c_str(), user.GetID(), Name.C_String());
+
+			if(result == ROOM_REQUEST_RESULT::ROOM_CREATED)
+				m_RoomManager->AddUserToRoom(user.GetID(), m_RoomManager->GetRoomByName(Name.C_String()).GetID());
+			break;
+		}
+
+		case JOIN_ROOM:
+		{
+			int RoomID, ClientID;
+			RakNet::BitStream bsIn(packet->data, packet->length, false);
+			bsIn.IgnoreBytes(sizeof(PacketID));
+			bsIn.Read(RoomID);
+			bsIn.Read(ClientID);
+
+			m_RoomManager->AddUserToRoom(ClientID, RoomID);
 			break;
 		}
 
@@ -124,27 +137,6 @@ void CServer::Update()
 		}
 		}
 	}
-}
-
-int CServer::GetClientIDByAddress(const char* Address)
-{
-	return m_ClientIDMap[Address];
-}
-
-const char* CServer::GetClientAddressByID(int ID)
-{
-	auto it = std::find_if(std::begin(m_ClientIDMap), std::end(m_ClientIDMap),
-		[&ID](auto&& p) { return p.second == ID; });
-
-	if (it == std::end(m_ClientIDMap))
-		return "unknown";
-
-	return it->first.c_str();
-}
-
-__int64 CServer::GetConnectedClientsCount()
-{
-	return m_ClientIDMap.size();
 }
 
 void CServer::SendBitStream(CUser User, RakNet::BitStream* BitStream)

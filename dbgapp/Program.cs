@@ -58,10 +58,21 @@ class Program
     public delegate void IntroduceClientCallback(int ClientID, string Name);
 
     [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
-
     public unsafe static extern void RequestNewRoom(string Name, UInt32* Result);
 
-    public static void OnClientConnect(string name, int id)
+    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetRoomJoinNotificationHandler(RoomJoinNotificationCallback callback);
+    public delegate void RoomJoinNotificationCallback(int RoomID, int ClientID, string UserName);
+
+    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+    public unsafe static extern void JoinRoom(int RoomID);
+
+    public static void RoomJoinNotification(int RoomID, int ClientID, string UserName)
+    {
+        Console.WriteLine($"[Room {RoomID}]: {UserName} [{ClientID}] joined the room.");
+    }
+
+public static void OnClientConnect(string name, int id)
     {
         Console.WriteLine($"{name}[{id}] connected");
     }
@@ -128,6 +139,7 @@ class Program
         SetClientDisconnectHandler(OnClientDisconnect);
         SetChatroomMessageHandler(OnIncomingChatroomMessage);
         SetConnectionAcceptedHandler(OnConnectionAccepted);
+        SetRoomJoinNotificationHandler(RoomJoinNotification);
 
         Console.WriteLine("gimme name");
         string? Name = Console.ReadLine();
@@ -163,7 +175,7 @@ class Program
                     case ConsoleKey.F1:
                     {
                         Console.WriteLine("Sent chatroom message");
-                        SendChatroomMessage("FAASGMNLASGFASTZ", 69);
+                        SendChatroomMessage("FAASGMNLASGFASTZ", 0);
                         break;
                     }
 
@@ -194,6 +206,14 @@ class Program
                                     Console.WriteLine($"Room with name {RoomName} already exists");
                             }
                         }
+                        break;
+                    }
+
+                    case ConsoleKey.F4:
+                    {
+                        int RoomID = 0;
+                        JoinRoom(RoomID);
+                        Console.WriteLine($"Joining Room ID {RoomID}");
                         break;
                     }
 

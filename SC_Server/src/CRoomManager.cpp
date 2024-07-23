@@ -1,4 +1,6 @@
 #include "CRoomManager.h"
+#include "CUserManager.h"
+#include "CServer.h"
 
 CRoomManager::CRoomManager(int MaxRooms)
 	: m_MaxRooms(MaxRooms)
@@ -36,7 +38,41 @@ int CRoomManager::GetRoomsCount()
 	return count;
 }
 
-void CRoomManager::SendChatMessage(UserID userID, RoomID roomID, std::string message)
+void CRoomManager::AddUserToRoom(UserID userID, RoomID roomID)
 {
-	m_Rooms[roomID].SendChatMessage(userID, message);
+	if (!IsRoomValid(roomID))
+		return;
+
+	CServer* server = CServer::GetInstance();
+	CUserManager* userMngr = server->GetUserManager();
+	CRoom& room = GetRoomByID(roomID);
+	CUser& user = userMngr->GetUserByID(userID);
+	room.AddUser(user);
+}
+
+CRoom CRoomManager::GetRoomByName(std::string Name)
+{
+	for (auto& room : m_Rooms)
+	{
+		if (room.GetName() == Name)
+			return room;
+	}
+
+	return CRoom();
+}
+
+bool CRoomManager::IsRoomValid(RoomID roomID)
+{
+	for (auto& room : m_Rooms)
+	{
+		if (room.GetID() == roomID)
+			return true;
+	}
+
+	return false;
+}
+
+void CRoomManager::SendChatMessage(UserID FromUserID, RoomID roomID, std::string message)
+{
+	m_Rooms[roomID].SendChatMessage(FromUserID, message);
 }
