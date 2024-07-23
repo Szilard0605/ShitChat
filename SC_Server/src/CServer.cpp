@@ -92,6 +92,7 @@ void CServer::Update()
 
 		case CREATE_ROOM_REQUEST:
 		{
+			
 			// Request room and send the result to requesting client
 			RakNet::RakString Name;
 			RakNet::RakString Message;
@@ -101,6 +102,7 @@ void CServer::Update()
 
 			ROOM_REQUEST_RESULT result = m_RoomManager->NewRoom(Name.C_String());
 			
+			// Send back the result to the client
 			RakNet::BitStream bsOut;
 			bsOut.Write(PacketID::CREATE_ROOM_REQUEST);
 			bsOut.Write(result);
@@ -113,6 +115,7 @@ void CServer::Update()
 			if (result == ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS)
 				printf("%s [%d] failed to create a room named %s, because a room with this name already exists\n", user.GetName().c_str(), user.GetID(), Name.C_String());
 
+			// Add user to room
 			if(result == ROOM_REQUEST_RESULT::ROOM_CREATED)
 				m_RoomManager->AddUserToRoom(user.GetID(), m_RoomManager->GetRoomByName(Name.C_String()).GetID());
 			break;

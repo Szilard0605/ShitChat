@@ -2,6 +2,8 @@
 #include "CUserManager.h"
 #include "CServer.h"
 
+#include "PacketIdentifiers.h"
+
 CRoomManager::CRoomManager(int MaxRooms)
 	: m_MaxRooms(MaxRooms)
 {
@@ -10,19 +12,26 @@ CRoomManager::CRoomManager(int MaxRooms)
 
 ROOM_REQUEST_RESULT CRoomManager::NewRoom(std::string Name)
 {
-	ROOM_REQUEST_RESULT result = ROOM_REQUEST_RESULT::NONE;
 	for (int i = 0; i < m_MaxRooms; i++)
 	{
 		if (m_Rooms[i].GetName() == Name)
-			result = ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS;
+			return ROOM_REQUEST_RESULT::NAME_ALREADY_EXISTS;
 
 		if (!m_Rooms[i].IsActive())
 		{
 			m_Rooms[i] = CRoom(i, Name);
-			result = ROOM_REQUEST_RESULT::ROOM_CREATED;
+			RakNet::BitStream bsOut;
+			bsOut.Write(PacketID::CREATE_ROOM);
+			bsOut.Write(i);
+			bsOut.Write(Name.c_str());
+			CServer::GetInstance()->GetUserManager()->SendBitStreamToAllUsers(&bsOut);
+
+			return ROOM_REQUEST_RESULT::ROOM_CREATED;
 		}
+
+		return ROOM_REQUEST_RESULT::NONE;;
 	}
-	return result;
+	return ROOM_REQUEST_RESULT::NONE;;
 }
 
 int CRoomManager::GetRoomsCount()

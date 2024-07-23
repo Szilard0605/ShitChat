@@ -16,7 +16,7 @@ public:
 
 	void AddUser(CUser user);
 	void RemoveUser(CUser user);
-	void SendChatMessage(UserID FromUser, std::string Message);
+	void SendChatMessage(UserID FromUserID, std::string Message);
 	inline int IsActive() { return (m_ID != -1); }
 	inline std::string GetName() const { return m_Name; }
 	inline int GetID() const { return m_ID; }

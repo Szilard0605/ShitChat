@@ -66,12 +66,12 @@ int CUserManager::GetUserCount()
 void CUserManager::IntroduceUser(CUser& user)
 {
 	RakNet::BitStream bsOut;
-	// Introduce connected user to already connected users
 	for (int i = 0; i < m_MaxUsers; i++)
 	{
 		if (!m_Users[i].IsValid() || m_Users[i] == user)
 			continue;
 
+		// Introduce connected user to already connected users
 		bsOut.Reset();
 		bsOut.Write(PacketID::INTRODUCE_CLIENT);
 		bsOut.Write(user.GetID());
@@ -81,7 +81,7 @@ void CUserManager::IntroduceUser(CUser& user)
 		// Introduce already connected users to recently the connected one
 		bsOut.Reset();
 		bsOut.Write(PacketID::INTRODUCE_CLIENT);
-		bsOut.Write(m_Users[i].GetID());
+		bsOut.Write(i);
 		bsOut.Write(m_Users[i].GetName().c_str());
 		CServer::GetInstance()->SendBitStream(user, &bsOut);
 	}

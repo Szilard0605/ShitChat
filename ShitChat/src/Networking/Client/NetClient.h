@@ -7,6 +7,7 @@ typedef void (*ChatroomMessageCallback)(int ClientID, const char* Message, int R
 typedef void (*IntroduceClientCallback)(int ClientID, const char* Name);
 typedef void (*ClientDisconnectCallback)(const char* Name, int ClientID);
 typedef void (*RoomJoinNotificationCallback)(int RoomID, int ID, const char* Name);
+typedef void (*OnRoomCreatedCallback)(int RoomID, const char* RoomName);
 
 #include <stdint.h>
 
@@ -23,6 +24,7 @@ extern "C"
 	SC_EXPORT void RequestNewRoom(const char* Name, uint32_t* ResultPtr);
 	SC_EXPORT void SetChatroomMessageHandler(ChatroomMessageCallback Callback);
 	SC_EXPORT void SetRoomJoinNotificationHandler(RoomJoinNotificationCallback Callback);
+	SC_EXPORT void SetRoomCreatedHandler(OnRoomCreatedCallback Callback);
 
 	SC_EXPORT void SetIntroduceClientHandler(IntroduceClientCallback Callback);
 

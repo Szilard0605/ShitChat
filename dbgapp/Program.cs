@@ -67,6 +67,15 @@ class Program
     [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
     public unsafe static extern void JoinRoom(int RoomID);
 
+    [DllImport(SC_CoreDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetRoomCreatedHandler(RoomCreatedCallback callback);
+    public delegate void RoomCreatedCallback(int RoomID, string RoomName);
+
+    public static void OnRoomCreated(int RoomID, string RoomName)
+    {
+        Console.WriteLine($"A room has been created with ID {RoomID} and name {RoomName}");
+    }
+
     public static void RoomJoinNotification(int RoomID, int ClientID, string UserName)
     {
         Console.WriteLine($"[Room {RoomID}]: {UserName} [{ClientID}] joined the room.");
@@ -140,6 +149,7 @@ public static void OnClientConnect(string name, int id)
         SetChatroomMessageHandler(OnIncomingChatroomMessage);
         SetConnectionAcceptedHandler(OnConnectionAccepted);
         SetRoomJoinNotificationHandler(RoomJoinNotification);
+        SetRoomCreatedHandler(OnRoomCreated);
 
         Console.WriteLine("gimme name");
         string? Name = Console.ReadLine();

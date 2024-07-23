@@ -23,6 +23,7 @@ static ChatroomMessageCallback s_ChatroomMessageCallback;
 static IntroduceClientCallback s_IntroduceClientCallback;
 static ClientDisconnectCallback s_ClientDisconnectCallback;
 static RoomJoinNotificationCallback s_RoomJoinNotiCallback;
+static OnRoomCreatedCallback s_RoomCreatedCallback;
 
 struct ClientData
 {
@@ -149,8 +150,20 @@ void ClientUpdate()
 				bsIn.Read(RoomID);
 				bsIn.Read(ClientID);
 				bsIn.Read(Name);
-
 				CALL_HANDLER(s_RoomJoinNotiCallback, RoomID, ClientID, Name.C_String());
+				break;
+			}
+
+			case CREATE_ROOM:
+			{
+				int RoomID;
+				RakNet::RakString Name;
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(PacketID));
+				bsIn.Read(RoomID);
+				bsIn.Read(Name);
+
+				CALL_HANDLER(s_RoomCreatedCallback, RoomID, Name.C_String());
 				break;
 			}
 
@@ -170,8 +183,6 @@ void SetConnectionAcceptedHandler(ConnectionAcceptedCallback Callback)
 
 void JoinRoom(int RoomID)
 {
-	printf("my id: %d\n", s_ClientData.ID);
-
 	// Send client data to server
 	RakNet::BitStream bsOut;
 	bsOut.Write(PacketID::JOIN_ROOM);
@@ -209,6 +220,11 @@ void SetChatroomMessageHandler(ChatroomMessageCallback Callback)
 void SetRoomJoinNotificationHandler(RoomJoinNotificationCallback Callback)
 {
 	s_RoomJoinNotiCallback = Callback;
+}
+
+void SetRoomCreatedHandler(OnRoomCreatedCallback Callback)
+{
+	s_RoomCreatedCallback = Callback;
 }
 
 void SetIntroduceClientHandler(IntroduceClientCallback Callback)
