@@ -13,48 +13,47 @@ void CUserManager::AddUser(std::string Name, RakNet::SystemAddress Address)
 {
 	for(int i = 0; i < m_MaxUsers; i ++)
 	{
-		if (!m_Users[i].IsActive())
+		if (m_Users[i].IsActive())
+			continue;
+
+		m_Users[i] = CUser(Address, i, Name);
+
+		// Send client data
 		{
-			m_Users[i] = CUser(Address, i, Name);
+			RakNet::BitStream bsOut;
+			bsOut.Write(PacketID::CLIENT_DATA);
+			bsOut.Write(i);
+			CServer::GetInstance()->SendBitStream(m_Users[i], &bsOut);
+		}
 
+		
+		for (int j = 0; j < m_MaxUsers; j++)
+		{
+			if (m_Users[j].GetID() == i)
+				continue;
 
-			// Send client data
+			if (m_Users[j].GetID() != i)
 			{
+				// Introduce connected client to already connected clients	
 				RakNet::BitStream bsOut;
-				bsOut.Write(PacketID::CLIENT_DATA);
+				bsOut.Write(PacketID::INTRODUCE_CLIENT);
 				bsOut.Write(i);
+				bsOut.Write(Name.c_str());
+				CServer::GetInstance()->SendBitStream(m_Users[j], &bsOut);
+			}
+
+			if (m_Users[j].GetID() == i)
+			{
+				// Introduce already connected clients to recently connected client
+				RakNet::BitStream bsOut;
+				bsOut.Write(PacketID::INTRODUCE_CLIENT);
+				bsOut.Write(j);
+				bsOut.Write(m_Users[j].GetName().c_str());
 				CServer::GetInstance()->SendBitStream(m_Users[i], &bsOut);
 			}
-
-			
-			for (int j = 0; j < m_MaxUsers; j++)
-			{
-				if (m_Users[j].GetID() == i)
-					continue;
-
-				if (m_Users[j].GetID() != i)
-				{
-					// Introduce connected client to already connected clients	
-					RakNet::BitStream bsOut;
-					bsOut.Write(PacketID::INTRODUCE_CLIENT);
-					bsOut.Write(i);
-					bsOut.Write(Name.c_str());
-					CServer::GetInstance()->SendBitStream(m_Users[j], &bsOut);
-				}
-
-				if (m_Users[j].GetID() == i)
-				{
-					// Introduce already connected clients to recently connected client
-					RakNet::BitStream bsOut;
-					bsOut.Write(PacketID::INTRODUCE_CLIENT);
-					bsOut.Write(j);
-					bsOut.Write(m_Users[j].GetName().c_str());
-					CServer::GetInstance()->SendBitStream(m_Users[i], &bsOut);
-				}
-			}
-			printf("%s [%d] connected at %s\n", Name.c_str(), i, m_Users[i].GetAddress().ToString());
-			break;
 		}
+		printf("%s [%d] connected at %s\n", Name.c_str(), i, m_Users[i].GetAddress().ToString());
+		break;
 	}
 }
 
